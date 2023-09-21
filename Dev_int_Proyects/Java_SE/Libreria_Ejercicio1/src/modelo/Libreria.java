@@ -16,8 +16,9 @@ public class Libreria {
 		LibroObjectMother.iniciarLibreria(this);
 	}
 	
-	public Boolean guardarLibro(String isbn, String titulo, String autor, String editorial, Float precio) {
-		return addLibro(new Libro(isbn, titulo, autor, editorial, precio));
+	public Boolean guardarLibro(String isbn, String titulo, String autor, String editorial,
+								Float precio, String formato, String estado, Integer stock) {
+		return addLibro(new Libro(isbn, titulo, autor, editorial, precio, formato, estado, stock));
 	}
 
 	public Boolean addLibro(Libro libro) {
@@ -74,5 +75,14 @@ public class Libreria {
 		
 		return respuesta;
 	}
+	
+	public Libro getLibro(String isbn) {
+		for (Libro libro : libreria) {
+			if(libro.getIsbn().equals(isbn))
+				return libro;
+		}
+		return null;
+	}
+	
 
 }

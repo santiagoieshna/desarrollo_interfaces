@@ -18,6 +18,10 @@ import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JRadioButton;
+import javax.swing.SwingConstants;
+import javax.swing.border.LineBorder;
+import javax.swing.border.MatteBorder;
+import javax.swing.border.CompoundBorder;
 
 public class UI extends JFrame {
 
@@ -41,7 +45,27 @@ public class UI extends JFrame {
 	protected JRadioButton rdbtnRustica;
 	protected JRadioButton rdbtnReedicion;
 	protected JRadioButton rdbtnNovedad;
-	protected ButtonGroup grupoTag;
+	protected ButtonGroup grupoFormato;
+	protected ButtonGroup grupoEstado;
+	private JLabel lblFormato;
+	private JPanel panelVenta;
+	private JLabel lblIsnV;
+	private JLabel lblTituloVenta;
+	private JLabel lblAutorVentas;
+	private JLabel lblEditorialVentas;
+	private JLabel lblPrecioVenta;
+	private JLabel lblEstado;
+	private JTextField txtIbnVenta;
+	private JTextField txtTituloVenta;
+	private JTextField txtAutorVenta;
+	private JTextField txtEditorialVenta;
+	private JTextField txtFormatoVenta;
+	private JLabel lblFormatoVenta;
+	private JLabel lblEstadoVenta;
+	private JTextField txtEstadoVenta;
+	private JTextField textField;
+	private JLabel lblTotal;
+	protected JLabel lblTotalVenta;
 	
 
 
@@ -111,33 +135,59 @@ public class UI extends JFrame {
 		txtPrecio.setColumns(10);
 		panelLibro.add(txtPrecio, "cell 1 4,grow");
 		
-		panel = new JPanel();
-		panelLibro.add(panel, "cell 1 5,grow");
-		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		lblFormato = new JLabel("Formato");
+		panelLibro.add(lblFormato, "cell 0 5");
 		
-		grupoTag = new ButtonGroup();
-		// TODO insertar boton grupo
+		panel = new JPanel();
+		panel.setBorder(new CompoundBorder());
+		panelLibro.add(panel, "cell 1 5,grow");
+		
+		grupoFormato = new ButtonGroup();
+		
 		
 		rdbtnCartone = new JRadioButton("Cartoné");
-		panel.add(rdbtnCartone);
-		
+		rdbtnCartone.setActionCommand(rdbtnCartone.getText());
 		rdbtnRustica = new JRadioButton("Rústica");
-		panel.add(rdbtnRustica);
-		
+		rdbtnRustica.setActionCommand(rdbtnRustica.getText());
 		rdbtnGrapada = new JRadioButton("Grapada");
-		panel.add(rdbtnGrapada);
-		
+		rdbtnGrapada.setActionCommand(rdbtnGrapada.getText());
 		rdbtnEspiral = new JRadioButton("Espiral");
+		rdbtnEspiral.setActionCommand(rdbtnEspiral.getText());
+		
+		// Metemos los botones en el ButtonGroup
+		grupoFormato.add(rdbtnCartone);
+		grupoFormato.add(rdbtnEspiral);
+		grupoFormato.add(rdbtnGrapada);
+		grupoFormato.add(rdbtnNovedad);
+		grupoFormato.add(rdbtnReedicion);
+		grupoFormato.add(rdbtnRustica);
+		panel.setLayout(new GridLayout(0, 4, 0, 0));
+		
+		// Metemos los botones en el panel
+		panel.add(rdbtnCartone);
+		panel.add(rdbtnRustica);
+		panel.add(rdbtnGrapada);
 		panel.add(rdbtnEspiral);
+		
+		lblEstado = new JLabel("Estado");
+		panelLibro.add(lblEstado, "cell 0 6");
 		
 		panel_1 = new JPanel();
 		panelLibro.add(panel_1, "cell 1 6,grow");
+		panel_1.setLayout(new GridLayout(0, 2, 0, 0));
 		
 		rdbtnReedicion = new JRadioButton("Reedición");
+		rdbtnReedicion.setActionCommand(rdbtnReedicion.getText());
 		panel_1.add(rdbtnReedicion);
 		
 		rdbtnNovedad = new JRadioButton("Novedad");
+		rdbtnNovedad.setActionCommand(rdbtnNovedad.getText());
 		panel_1.add(rdbtnNovedad);
+		
+		grupoEstado = new ButtonGroup();
+		// Botones estado en el GrupoEstado
+		grupoEstado.add(rdbtnReedicion);
+		grupoEstado.add(rdbtnNovedad);
 		
 		JPanel panelLibreria = new JPanel();
 		tabbedPane.addTab("Libreria", null, panelLibreria, null);
@@ -148,6 +198,66 @@ public class UI extends JFrame {
 		
 		tableLibreria = new JTable();
 		scrollPane.setViewportView(tableLibreria);
+		
+		panelVenta = new JPanel();
+		panelVenta.setBackground(new Color(202, 232, 232));
+		tabbedPane.addTab("Venta", null, panelVenta, null);
+		panelVenta.setLayout(new MigLayout("", "[50,center][50,fill][150,center][80][80]", "[40,center][40][40][40][40][40][40][40]"));
+		
+		lblIsnV = new JLabel("ISBN");
+		panelVenta.add(lblIsnV, "cell 1 0,alignx trailing");
+		
+		txtIbnVenta = new JTextField();
+		panelVenta.add(txtIbnVenta, "cell 2 0,growx");
+		txtIbnVenta.setColumns(10);
+		
+		lblTituloVenta = new JLabel("Titulo");
+		panelVenta.add(lblTituloVenta, "cell 1 1,alignx trailing");
+		
+		txtTituloVenta = new JTextField();
+		panelVenta.add(txtTituloVenta, "cell 2 1,growx");
+		txtTituloVenta.setColumns(10);
+		
+		lblAutorVentas = new JLabel("Autor");
+		panelVenta.add(lblAutorVentas, "cell 1 2,alignx trailing");
+		
+		txtAutorVenta = new JTextField();
+		panelVenta.add(txtAutorVenta, "cell 2 2,growx");
+		txtAutorVenta.setColumns(10);
+		
+		lblEditorialVentas = new JLabel("Editorial");
+		panelVenta.add(lblEditorialVentas, "cell 1 3,alignx trailing");
+		
+		txtEditorialVenta = new JTextField();
+		panelVenta.add(txtEditorialVenta, "cell 2 3,growx");
+		txtEditorialVenta.setColumns(10);
+		
+		lblFormatoVenta = new JLabel("Formato");
+		panelVenta.add(lblFormatoVenta, "cell 1 4");
+		
+		txtFormatoVenta = new JTextField();
+		panelVenta.add(txtFormatoVenta, "cell 2 4,growx");
+		txtFormatoVenta.setColumns(10);
+		
+		lblEstadoVenta = new JLabel("Estado");
+		panelVenta.add(lblEstadoVenta, "cell 1 5,alignx trailing");
+		
+		txtEstadoVenta = new JTextField();
+		txtEstadoVenta.setColumns(10);
+		panelVenta.add(txtEstadoVenta, "cell 2 5,growx");
+		
+		lblPrecioVenta = new JLabel("Precio");
+		panelVenta.add(lblPrecioVenta, "cell 1 6,alignx trailing");
+		
+		textField = new JTextField();
+		textField.setColumns(10);
+		panelVenta.add(textField, "cell 2 6,growx");
+		
+		lblTotal = new JLabel("Total");
+		panelVenta.add(lblTotal, "cell 1 7");
+		
+		lblTotalVenta = new JLabel("----");
+		panelVenta.add(lblTotalVenta, "cell 2 7");
 		
 		JPanel panelBotones = new JPanel();
 		contentPane.add(panelBotones, BorderLayout.SOUTH);
@@ -166,6 +276,25 @@ public class UI extends JFrame {
 	
 		
 		panelBotones.add(btnSalir);
+	}
+	
+	protected String getIsbn() {
+		return txtISBN.getText();
+	}
+	protected String getITitulo() {
+		return txtISBN.getText();
+	}
+	protected String getPrecio() {
+		return txtISBN.getText();
+	}
+	protected String getTitulo() {
+		return txtISBN.getText();
+	}
+	protected String getAutor() {
+		return txtISBN.getText();
+	}
+	protected String getEditorial() {
+		return txtISBN.getText();
 	}
 
 }
