@@ -1,28 +1,23 @@
 package vista;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTabbedPane;
-import javax.swing.BoxLayout;
 import javax.swing.JLabel;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import javax.swing.SwingConstants;
 import java.awt.Color;
 import net.miginfocom.swing.MigLayout;
 import java.awt.GridLayout;
 import javax.swing.JTextField;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JRadioButton;
 
 public class UI extends JFrame {
 
@@ -38,7 +33,16 @@ public class UI extends JFrame {
 	protected JButton btnGuardar;
 	protected JTable tableLibreria;
 	protected JTabbedPane tabbedPane ;
-
+	private JPanel panel;
+	private JPanel panel_1;
+	protected JRadioButton rdbtnCartone;
+	protected JRadioButton rdbtnEspiral;
+	protected JRadioButton rdbtnGrapada;
+	protected JRadioButton rdbtnRustica;
+	protected JRadioButton rdbtnReedicion;
+	protected JRadioButton rdbtnNovedad;
+	protected ButtonGroup grupoTag;
+	
 
 
 	/**
@@ -47,7 +51,7 @@ public class UI extends JFrame {
 	public UI() {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 500, 400);
+		setBounds(100, 100, 712, 508);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -70,42 +74,70 @@ public class UI extends JFrame {
 		JPanel panelLibro = new JPanel();
 		panelLibro.setBackground(new Color(202, 232, 232));
 		tabbedPane.addTab("Libro", null, panelLibro, null);
-		panelLibro.setLayout(new GridLayout(6, 2, 0, 0));
+		panelLibro.setLayout(new MigLayout("", "[129.00px][235px,grow,right][350px,grow]", "[grow][grow][grow][grow][grow][grow][grow]"));
 		
 		JLabel lblISBN = new JLabel("ISBN");
-		panelLibro.add(lblISBN);
+		panelLibro.add(lblISBN, "cell 0 0,grow");
 		
 		txtISBN = new JTextField();
 		txtISBN.setColumns(10);
-		panelLibro.add(txtISBN);
+		panelLibro.add(txtISBN, "cell 1 0,grow");
 		
 		JLabel lblTitulo = new JLabel("Titulo");
-		panelLibro.add(lblTitulo);
+		panelLibro.add(lblTitulo, "cell 0 1,grow");
 		
 		txtTitulo = new JTextField();
-		panelLibro.add(txtTitulo);
+		panelLibro.add(txtTitulo, "cell 1 1,grow");
 		txtTitulo.setColumns(10);
 		
 		JLabel lblAutor = new JLabel("Autor");
-		panelLibro.add(lblAutor);
+		panelLibro.add(lblAutor, "cell 0 2,grow");
 		
 		txtAutor = new JTextField();
 		txtAutor.setColumns(10);
-		panelLibro.add(txtAutor);
+		panelLibro.add(txtAutor, "cell 1 2,grow");
 		
 		JLabel lblEditorial = new JLabel("Editorial");
-		panelLibro.add(lblEditorial);
+		panelLibro.add(lblEditorial, "cell 0 3,grow");
 		
 		txtEditorial = new JTextField();
 		txtEditorial.setColumns(10);
-		panelLibro.add(txtEditorial);
+		panelLibro.add(txtEditorial, "cell 1 3,grow");
 		
 		JLabel lblPrecio = new JLabel("Precio");
-		panelLibro.add(lblPrecio);
+		panelLibro.add(lblPrecio, "cell 0 4,grow");
 		
 		txtPrecio = new JTextField();
 		txtPrecio.setColumns(10);
-		panelLibro.add(txtPrecio);
+		panelLibro.add(txtPrecio, "cell 1 4,grow");
+		
+		panel = new JPanel();
+		panelLibro.add(panel, "cell 1 5,grow");
+		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		grupoTag = new ButtonGroup();
+		// TODO insertar boton grupo
+		
+		rdbtnCartone = new JRadioButton("Cartoné");
+		panel.add(rdbtnCartone);
+		
+		rdbtnRustica = new JRadioButton("Rústica");
+		panel.add(rdbtnRustica);
+		
+		rdbtnGrapada = new JRadioButton("Grapada");
+		panel.add(rdbtnGrapada);
+		
+		rdbtnEspiral = new JRadioButton("Espiral");
+		panel.add(rdbtnEspiral);
+		
+		panel_1 = new JPanel();
+		panelLibro.add(panel_1, "cell 1 6,grow");
+		
+		rdbtnReedicion = new JRadioButton("Reedición");
+		panel_1.add(rdbtnReedicion);
+		
+		rdbtnNovedad = new JRadioButton("Novedad");
+		panel_1.add(rdbtnNovedad);
 		
 		JPanel panelLibreria = new JPanel();
 		tabbedPane.addTab("Libreria", null, panelLibreria, null);
