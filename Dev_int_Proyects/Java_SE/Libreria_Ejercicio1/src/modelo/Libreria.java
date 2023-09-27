@@ -79,13 +79,6 @@ public class Libreria {
 		return null;
 	}
 	
-	public List<Libro> getListByISBN(String isbn){
-		List<Libro> librosEncontrados = libreria.stream()
-									.filter(libro-> libro.getIsbn().indexOf(isbn)!=-1)
-									.collect(Collectors.toList());
-		
-		return librosEncontrados;
-	}
 
 	public int size() {
 		
@@ -122,5 +115,47 @@ public class Libreria {
 		libro.setFormato(formato);
 		libro.setEstado(estado);
 	}
+	
+
+	public List<Libro> getListByISBN(String isbn){
+		List<Libro> librosEncontrados = libreria.stream()
+									.filter(libro-> libro.getIsbn().indexOf(isbn)!=-1)
+									.collect(Collectors.toList());
+		
+		return librosEncontrados;
+	}
+
+	public List<Libro> getListByEditorial(String editorial) {
+		
+		return this.libreria.stream()
+				.filter( libro -> {
+					return libro.getEditorial()
+					.toLowerCase()
+					.indexOf(editorial.toLowerCase())!=-1;
+				})
+				.collect(Collectors.toList());
+	}
+	public List<Libro> getListByAutor(String autor) {
+		
+		return this.libreria.stream()
+				.filter( libro -> {
+					return libro.getAutor()
+							.toLowerCase()
+							.indexOf(autor.toLowerCase())!=-1;
+				})
+				.collect(Collectors.toList());
+	}
+	public List<Libro> getListByTitulo(String titulo) {
+		
+		return this.libreria.stream()
+				.filter( libro -> {
+					return libro.getTitulo()
+							.toLowerCase()
+							.indexOf(titulo.toLowerCase())!=-1;
+				})
+				.collect(Collectors.toList());
+	}
+	
+	
 
 }

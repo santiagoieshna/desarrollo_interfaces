@@ -33,6 +33,8 @@ import java.awt.event.MouseEvent;
 import javax.swing.SpinnerNumberModel;
 import java.awt.Dimension;
 import javax.swing.JTextArea;
+import javax.swing.JList;
+import javax.swing.DefaultComboBoxModel;
 
 public class UI extends JFrame {
 
@@ -82,6 +84,7 @@ public class UI extends JFrame {
 	protected JTextField textBuscador;
 	private JPanel panelLibreria;
 	protected JButton btnBuscar;
+	protected JComboBox filtro;
 	
 
 
@@ -207,7 +210,11 @@ public class UI extends JFrame {
 		
 		panelLibreria = new JPanel();
 		tabbedPane.addTab("Libreria", null, panelLibreria, null);
-		panelLibreria.setLayout(new MigLayout("", "[400][350,grow][150]", "[50,grow][371px]"));
+		panelLibreria.setLayout(new MigLayout("", "[400,grow][350,grow][150]", "[50,grow][371px]"));
+		
+		filtro = new JComboBox();
+		filtro.setModel(new DefaultComboBoxModel(new String[] {"ISBN", "TITULO", "AUTOR", "EDITORIAL"}));
+		panelLibreria.add(filtro, "cell 0 0,alignx right");
 		
 		textBuscador = new JTextField();
 		panelLibreria.add(textBuscador, "cell 1 0,growx");

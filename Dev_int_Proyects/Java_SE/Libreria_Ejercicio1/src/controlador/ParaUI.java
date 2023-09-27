@@ -28,14 +28,13 @@ public class ParaUI extends UI {
 		super();
 		libreria = new Libreria();
 		LibroObjectMother.iniciarLibreria(libreria);
-		
+
 		gestorTabla = new ParaUITable(tableLibreria);
 		gestorTabla.cargarTabla(libreria);
 
 		gestorMensajes = new Mensajes(this.contentPane);
 
-		gestorLibroPanel = new ParaUILibroPanel(txtTitulo, txtISBN,
-				txtPrecio, txtAutor, txtEditorial, grupoFormato,
+		gestorLibroPanel = new ParaUILibroPanel(txtTitulo, txtISBN, txtPrecio, txtAutor, txtEditorial, grupoFormato,
 				grupoEstado);
 
 		// SALIR --------------------------------------------
@@ -97,30 +96,32 @@ public class ParaUI extends UI {
 				}
 			}
 		});
-		
+
 		// BUSCAR libro ----------------------------------------------
 		btnBuscar.addActionListener(e -> {
-			List<Libro> librosMatch = libreria.getListByISBN(textBuscador.getText());
-			Libreria libreriaBusqueda = new Libreria(librosMatch);
-			
+			if (!textBuscador.getText().equals("")) {
+				buscar();
+			} else {
+				gestorTabla.cargarTabla(libreria);
+			}
 		});
+		
 
-		// Ir a Ventas -----------------------------------------------
+		// IR a VENTA -----------------------------------------------
 		btnVender.addActionListener(e -> {
 			if (gestorTabla.tablaEstaSeleccionada()) {
 				String isbn = gestorTabla.getIsbnTable();
 				Libro libro = libreria.getLibro(isbn);
-				if(libro.getStock()>=1) {
-					
-				activarTab(Tabs.VENDER);
-				rellenarCamposParaVender(libro);
-				gestorLibroPanel.desabilitarISBNCampo();
-				spinner.setValue(1);
-				// new SpinnerNumberModel(valorInicial, minimo, maximo, Salto)
-				spinner.setModel(new SpinnerNumberModel(Integer.valueOf(1),
-						Integer.valueOf(1),libreria.getLibro(isbn).getStock(),
-						Integer.valueOf(1)));
-				}else {
+				if (libro.getStock() >= 1) {
+
+					activarTab(Tabs.VENDER);
+					rellenarCamposParaVender(libro);
+					gestorLibroPanel.desabilitarISBNCampo();
+					spinner.setValue(1);
+					// new SpinnerNumberModel(valorInicial, minimo, maximo, Salto)
+					spinner.setModel(new SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1),
+							libreria.getLibro(isbn).getStock(), Integer.valueOf(1)));
+				} else {
 					String mensaje = "El libro seleccioando esta fuera de Stock";
 					String tituloMensaje = "Fuera de stock";
 					gestorMensajes.mensajeError(tituloMensaje, mensaje);
@@ -160,10 +161,42 @@ public class ParaUI extends UI {
 		});
 	}
 
+	private void buscar() {
+		if(filtro.getSelectedItem().toString().equals("ISBN")) {
+			busquedaISBN();
+		}else if(filtro.getSelectedItem().toString().equals("AUTOR")) {
+			busquedaAutor();
+		}else if(filtro.getSelectedItem().toString().equals("TITULO")) {
+			busquedaTitulo();
+		}else if(filtro.getSelectedItem().toString().equals("EDITORIAL")) {
+			busquedaEditorial();
+		}
+		
+	}
+
+	private void busquedaEditorial() {
+		List<Libro> librosMatch = libreria.getListByEditorial(textBuscador.getText());
+		gestorTabla.cargarTabla(new Libreria(librosMatch));
+	}
+
+	private void busquedaTitulo() {
+		List<Libro> librosMatch = libreria.getListByTitulo(textBuscador.getText());
+		gestorTabla.cargarTabla(new Libreria(librosMatch));
+	}
+
+	private void busquedaAutor() {
+		List<Libro> librosMatch = libreria.getListByAutor(textBuscador.getText());
+		gestorTabla.cargarTabla(new Libreria(librosMatch));
+	}
+
+	private void busquedaISBN() {
+		List<Libro> librosMatch = libreria.getListByISBN(textBuscador.getText());
+		gestorTabla.cargarTabla(new Libreria(librosMatch));
+	}
+
 	private void activarTab(Tabs vender) {
 		tabbedPane.setSelectedIndex(vender.getIndice());
 	}
-
 
 	private List<Libro> getLibreria() {
 		return libreria.getLibreria();
