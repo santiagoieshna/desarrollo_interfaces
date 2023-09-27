@@ -22,6 +22,17 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.CompoundBorder;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JSlider;
+import javax.swing.JScrollBar;
+import javax.swing.JComboBox;
+import javax.swing.JSpinner;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.SpinnerNumberModel;
+import java.awt.Dimension;
+import javax.swing.JTextArea;
 
 public class UI extends JFrame {
 
@@ -55,17 +66,19 @@ public class UI extends JFrame {
 	private JLabel lblEditorialVentas;
 	private JLabel lblPrecioVenta;
 	private JLabel lblEstado;
-	private JTextField txtIbnVenta;
-	private JTextField txtTituloVenta;
-	private JTextField txtAutorVenta;
-	private JTextField txtEditorialVenta;
-	private JTextField txtFormatoVenta;
+	protected JTextField txtIsbnVenta;
+	protected JTextField txtTituloVenta;
+	protected JTextField txtAutorVenta;
+	protected JTextField txtEditorialVenta;
+	protected JTextField txtFormatoVenta;
 	private JLabel lblFormatoVenta;
 	private JLabel lblEstadoVenta;
-	private JTextField txtEstadoVenta;
-	private JTextField textField;
+	protected JTextField txtEstadoVenta;
+	protected JTextField textPrecioVenta;
 	private JLabel lblTotal;
 	protected JLabel lblTotalVenta;
+	protected JButton btnVender;
+	protected JSpinner spinner;
 	
 
 
@@ -191,30 +204,33 @@ public class UI extends JFrame {
 		
 		JPanel panelLibreria = new JPanel();
 		tabbedPane.addTab("Libreria", null, panelLibreria, null);
-		panelLibreria.setLayout(new GridLayout(1, 0, 0, 0));
+		panelLibreria.setLayout(new MigLayout("", "[683px,grow][350][75]", "[50,grow][371px]"));
 		
 		JScrollPane scrollPane = new JScrollPane();
-		panelLibreria.add(scrollPane);
+		panelLibreria.add(scrollPane, "cell 0 1 3 1,grow");
 		
 		tableLibreria = new JTable();
+//		tableLibreria.selec
 		scrollPane.setViewportView(tableLibreria);
 		
 		panelVenta = new JPanel();
 		panelVenta.setBackground(new Color(202, 232, 232));
 		tabbedPane.addTab("Venta", null, panelVenta, null);
-		panelVenta.setLayout(new MigLayout("", "[50,center][50,fill][150,center][80][80]", "[40,center][40][40][40][40][40][40][40]"));
+		panelVenta.setLayout(new MigLayout("", "[50,center][50,fill][150,center][96.00][80,grow]", "[40,center][40][40][40][40][40][40][40]"));
 		
 		lblIsnV = new JLabel("ISBN");
 		panelVenta.add(lblIsnV, "cell 1 0,alignx trailing");
 		
-		txtIbnVenta = new JTextField();
-		panelVenta.add(txtIbnVenta, "cell 2 0,growx");
-		txtIbnVenta.setColumns(10);
+		txtIsbnVenta = new JTextField();
+		txtIsbnVenta.setEditable(false);
+		panelVenta.add(txtIsbnVenta, "cell 2 0,growx");
+		txtIsbnVenta.setColumns(10);
 		
 		lblTituloVenta = new JLabel("Titulo");
 		panelVenta.add(lblTituloVenta, "cell 1 1,alignx trailing");
 		
 		txtTituloVenta = new JTextField();
+		txtTituloVenta.setEditable(false);
 		panelVenta.add(txtTituloVenta, "cell 2 1,growx");
 		txtTituloVenta.setColumns(10);
 		
@@ -222,6 +238,7 @@ public class UI extends JFrame {
 		panelVenta.add(lblAutorVentas, "cell 1 2,alignx trailing");
 		
 		txtAutorVenta = new JTextField();
+		txtAutorVenta.setEditable(false);
 		panelVenta.add(txtAutorVenta, "cell 2 2,growx");
 		txtAutorVenta.setColumns(10);
 		
@@ -229,6 +246,7 @@ public class UI extends JFrame {
 		panelVenta.add(lblEditorialVentas, "cell 1 3,alignx trailing");
 		
 		txtEditorialVenta = new JTextField();
+		txtEditorialVenta.setEditable(false);
 		panelVenta.add(txtEditorialVenta, "cell 2 3,growx");
 		txtEditorialVenta.setColumns(10);
 		
@@ -236,6 +254,7 @@ public class UI extends JFrame {
 		panelVenta.add(lblFormatoVenta, "cell 1 4");
 		
 		txtFormatoVenta = new JTextField();
+		txtFormatoVenta.setEditable(false);
 		panelVenta.add(txtFormatoVenta, "cell 2 4,growx");
 		txtFormatoVenta.setColumns(10);
 		
@@ -243,21 +262,29 @@ public class UI extends JFrame {
 		panelVenta.add(lblEstadoVenta, "cell 1 5,alignx trailing");
 		
 		txtEstadoVenta = new JTextField();
+		txtEstadoVenta.setEditable(false);
 		txtEstadoVenta.setColumns(10);
 		panelVenta.add(txtEstadoVenta, "cell 2 5,growx");
 		
 		lblPrecioVenta = new JLabel("Precio");
 		panelVenta.add(lblPrecioVenta, "cell 1 6,alignx trailing");
 		
-		textField = new JTextField();
-		textField.setColumns(10);
-		panelVenta.add(textField, "cell 2 6,growx");
+		textPrecioVenta = new JTextField();
+		textPrecioVenta.setEditable(false);
+		textPrecioVenta.setColumns(10);
+		panelVenta.add(textPrecioVenta, "cell 2 6,growx");
 		
 		lblTotal = new JLabel("Total");
 		panelVenta.add(lblTotal, "cell 1 7");
 		
 		lblTotalVenta = new JLabel("----");
 		panelVenta.add(lblTotalVenta, "cell 2 7");
+		
+		spinner = new JSpinner();
+		spinner.setSize(new Dimension(10, 0));
+		spinner.setModel(new SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
+
+		panelVenta.add(spinner, "cell 3 7");
 		
 		JPanel panelBotones = new JPanel();
 		contentPane.add(panelBotones, BorderLayout.SOUTH);
@@ -271,6 +298,10 @@ public class UI extends JFrame {
 		
 		btnBorrar = new JButton("Borrar");
 		panelBotones.add(btnBorrar);
+		
+		btnVender = new JButton("Vender");
+		
+		panelBotones.add(btnVender);
 		
 		btnSalir = new JButton("Salir");
 	

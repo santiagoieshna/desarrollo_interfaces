@@ -62,11 +62,6 @@ public class Libreria {
 	public boolean estaIsbn(String isbn) {
 		boolean respuesta = false;
 		
-//		libreria.forEach(libro -> {
-//			if(libro.getIsbn().equals(isbn)) {
-//				respueta = true;
-//			}
-//		});
 		for (Libro libro : libreria) {
 			if(libro.getIsbn().equals(isbn)) {
 				respuesta = true;
