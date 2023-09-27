@@ -35,6 +35,8 @@ import java.awt.Dimension;
 import javax.swing.JTextArea;
 import javax.swing.JList;
 import javax.swing.DefaultComboBoxModel;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class UI extends JFrame {
 
@@ -221,6 +223,7 @@ public class UI extends JFrame {
 		textBuscador.setColumns(10);
 		
 		btnBuscar = new JButton("Buscar");
+		
 		
 		panelLibreria.add(btnBuscar, "cell 2 0");
 		

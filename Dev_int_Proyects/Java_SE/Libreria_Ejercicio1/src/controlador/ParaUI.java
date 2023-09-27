@@ -3,6 +3,8 @@ package controlador;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
@@ -15,6 +17,7 @@ import modelo.Libro;
 import modelo.LibroObjectMother;
 import modelo.Mensajes;
 import modelo.Tabs;
+import utiles.Validacion;
 import vista.UI;
 
 public class ParaUI extends UI {
@@ -48,24 +51,53 @@ public class ParaUI extends UI {
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				if (btnGuardar.getText().equals("Guardar")) {
-					libreria.guardarLibro(gestorLibroPanel.guardarLibro());
+				String titulo;
+				String mensaje;
 
-					gestorLibroPanel.limpiarCampos();
+				if (esGuardar()) {
 
-				} else {
-					String mensaje = "Seguro que quieres modificar el libro";
-					String titulo = "Modificar";
-					Integer opcion = gestorMensajes.mensajeSioNo(titulo, mensaje);
-					if (opcion == JOptionPane.YES_OPTION) {
-						Libro libro = gestorLibroPanel.guardarLibro();
-						libreria.modificarLibro(libro);
+					if (esISBvalido()) {
+						if (libreria.estaIsbn(getIsbnText())) {
+							if (esPrecioValido()) {
+								libreria.guardarLibro(gestorLibroPanel.guardarLibro());
+								gestorLibroPanel.limpiarCampos();
+							} else
+								gestorMensajes.mensajeError("Precio Erroneo", "El precio es erroneo");
+
+						} else {
+							mensaje = "El ISBN " + getIsbnText() + "Ya existe";
+							titulo = "Libro Existente";
+							gestorMensajes.mensajeError(titulo, mensaje);
+						}
+					} else {
+						titulo = "ISB invalido";
+						mensaje = "El ISBN debe tener 13 caracteres, todos numeros";
+						gestorMensajes.mensajeError(titulo, mensaje);
 					}
-					btnGuardar.setText("Guardar");
-					gestorLibroPanel.habilitarISBN();
-					gestorLibroPanel.limpiarCampos();
+				} else {
+					if (esPrecioValido()) {
+
+						mensaje = "Seguro que quieres modificar el libro";
+						titulo = "Modificar";
+						Integer opcion = gestorMensajes.mensajeSioNo(titulo, mensaje);
+						if (opcion == JOptionPane.YES_OPTION) {
+							Libro libro = gestorLibroPanel.guardarLibro();
+							libreria.modificarLibro(libro);
+						}
+						btnGuardar.setText("Guardar");
+						gestorLibroPanel.habilitarISBN();
+						gestorLibroPanel.limpiarCampos();
+					} else
+						mensaje = "El ISBN " + getIsbnText() + "Ya existe";
+						titulo = "Libro Existente";
+						gestorMensajes.mensajeError(titulo, mensaje);
 				}
 				gestorTabla.cargarTabla(libreria);
+			}
+
+			private boolean esISBvalido() {
+				// TODO Auto-generated method stub
+				return false;
 			}
 
 		});
@@ -95,17 +127,28 @@ public class ParaUI extends UI {
 					gestorTabla.cargarTabla(libreria);
 				}
 			}
+
 		});
 
 		// BUSCAR libro ----------------------------------------------
 		btnBuscar.addActionListener(e -> {
+
 			if (!textBuscador.getText().equals("")) {
 				buscar();
 			} else {
 				gestorTabla.cargarTabla(libreria);
 			}
+
 		});
-		
+
+		filtro.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getExtendedKeyCode() == KeyEvent.VK_ENTER) {
+					btnBuscar.doClick();
+				}
+			}
+		});
 
 		// IR a VENTA -----------------------------------------------
 		btnVender.addActionListener(e -> {
@@ -161,17 +204,22 @@ public class ParaUI extends UI {
 		});
 	}
 
+	protected boolean esPrecioValido() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 	private void buscar() {
-		if(filtro.getSelectedItem().toString().equals("ISBN")) {
+		if (filtro.getSelectedItem().toString().equals("ISBN")) {
 			busquedaISBN();
-		}else if(filtro.getSelectedItem().toString().equals("AUTOR")) {
+		} else if (filtro.getSelectedItem().toString().equals("AUTOR")) {
 			busquedaAutor();
-		}else if(filtro.getSelectedItem().toString().equals("TITULO")) {
+		} else if (filtro.getSelectedItem().toString().equals("TITULO")) {
 			busquedaTitulo();
-		}else if(filtro.getSelectedItem().toString().equals("EDITORIAL")) {
+		} else if (filtro.getSelectedItem().toString().equals("EDITORIAL")) {
 			busquedaEditorial();
 		}
-		
+
 	}
 
 	private void busquedaEditorial() {
@@ -213,5 +261,9 @@ public class ParaUI extends UI {
 		txtEstadoVenta.setText(libro.getEstado());
 		textPrecioVenta.setText(libro.getPrecio().toString());
 		lblTotalVenta.setText(libro.getPrecio().toString());
+	}
+
+	private boolean esGuardar() {
+		return btnGuardar.getText().equals("Guardar");
 	}
 }
