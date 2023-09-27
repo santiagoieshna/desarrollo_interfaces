@@ -3,6 +3,7 @@ package modelo;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Libreria {
 
@@ -13,12 +14,21 @@ public class Libreria {
 	public Libreria() {
 		super();
 		this.libreria = new ArrayList<>();
-		LibroObjectMother.iniciarLibreria(this);
 	}
+	
+	public Libreria(List<Libro> libros) {
+		super();
+		this.libreria = libros;
+	}
+	
 	
 	public Boolean guardarLibro(String isbn, String titulo, String autor, String editorial,
 								Float precio, String formato, String estado, Integer stock) {
 		return addLibro(new Libro(isbn, titulo, autor, editorial, precio, formato, estado, stock));
+	}
+	
+	public Boolean guardarLibro(Libro libro) {
+		return addLibro(libro);
 	}
 
 	public Boolean addLibro(Libro libro) {
@@ -48,16 +58,6 @@ public class Libreria {
 		return libreria;
 	}
 	
-	public void modificarLibro(String isbn, String titulo, String autor, String editorial, Float precio) {
-		for (Libro libro : libreria) {
-			if(libro.getIsbn().equals(isbn)) {
-				libro.setTitulo(titulo);
-				libro.setAutor(autor);
-				libro.setEditorial(editorial);
-				libro.setPrecio(precio);
-			}
-		}
-	}
 	
 	public boolean estaIsbn(String isbn) {
 		boolean respuesta = false;
@@ -79,5 +79,48 @@ public class Libreria {
 		return null;
 	}
 	
+	public List<Libro> getListByISBN(String isbn){
+		List<Libro> librosEncontrados = libreria.stream()
+									.filter(libro-> libro.getIsbn().indexOf(isbn)!=-1)
+									.collect(Collectors.toList());
+		
+		return librosEncontrados;
+	}
+
+	public int size() {
+		
+		return this.libreria.size();
+	}
+
+	public Libro get(int i) {
+		
+		return libreria.get(i);
+	}
+
+	public void editarLibro(Libro libroEditado) {
+		Libro libro = getLibro(libroEditado.getIsbn());
+		
+	}
+	
+	public void modificarLibro(Libro libroEditado) {
+		Libro libro = getLibro(libroEditado.getIsbn());
+		libro.setTitulo(libroEditado.getTitulo());
+		libro.setAutor(libroEditado.getAutor());
+		libro.setEditorial(libroEditado.getEditorial());
+		libro.setPrecio(libroEditado.getPrecio());
+		libro.setFormato(libroEditado.getFormato());
+		libro.setEstado(libroEditado.getEstado());
+	}
+	public void modificarLibro(String isbn, String titulo,
+			String autor, String editorial, String precio,
+			String formato, String estado) {
+		Libro libro = getLibro(isbn);
+		libro.setTitulo(titulo);
+		libro.setAutor(autor);
+		libro.setEditorial(editorial);
+		libro.setPrecio(Float.parseFloat(precio));
+		libro.setFormato(formato);
+		libro.setEstado(estado);
+	}
 
 }

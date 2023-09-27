@@ -42,14 +42,6 @@ public class UI extends JFrame {
 	protected JTextField txtPrecio;
 	protected JTextField txtAutor;
 	protected JTextField txtEditorial;
-	protected JButton btnSalir;
-	protected JButton btnBorrar;
-	protected JButton btnLimpiar;
-	protected JButton btnGuardar;
-	protected JTable tableLibreria;
-	protected JTabbedPane tabbedPane ;
-	private JPanel panel;
-	private JPanel panel_1;
 	protected JRadioButton rdbtnCartone;
 	protected JRadioButton rdbtnEspiral;
 	protected JRadioButton rdbtnGrapada;
@@ -58,6 +50,14 @@ public class UI extends JFrame {
 	protected JRadioButton rdbtnNovedad;
 	protected ButtonGroup grupoFormato;
 	protected ButtonGroup grupoEstado;
+	protected JButton btnSalir;
+	protected JButton btnBorrar;
+	protected JButton btnLimpiar;
+	protected JButton btnGuardar;
+	protected JTable tableLibreria;
+	protected JTabbedPane tabbedPane ;
+	private JPanel panel;
+	private JPanel panel_1;
 	private JLabel lblFormato;
 	private JPanel panelVenta;
 	private JLabel lblIsnV;
@@ -79,6 +79,9 @@ public class UI extends JFrame {
 	protected JLabel lblTotalVenta;
 	protected JButton btnVender;
 	protected JSpinner spinner;
+	protected JTextField textBuscador;
+	private JPanel panelLibreria;
+	protected JButton btnBuscar;
 	
 
 
@@ -202,9 +205,17 @@ public class UI extends JFrame {
 		grupoEstado.add(rdbtnReedicion);
 		grupoEstado.add(rdbtnNovedad);
 		
-		JPanel panelLibreria = new JPanel();
+		panelLibreria = new JPanel();
 		tabbedPane.addTab("Libreria", null, panelLibreria, null);
-		panelLibreria.setLayout(new MigLayout("", "[683px,grow][350][75]", "[50,grow][371px]"));
+		panelLibreria.setLayout(new MigLayout("", "[400][350,grow][150]", "[50,grow][371px]"));
+		
+		textBuscador = new JTextField();
+		panelLibreria.add(textBuscador, "cell 1 0,growx");
+		textBuscador.setColumns(10);
+		
+		btnBuscar = new JButton("Buscar");
+		
+		panelLibreria.add(btnBuscar, "cell 2 0");
 		
 		JScrollPane scrollPane = new JScrollPane();
 		panelLibreria.add(scrollPane, "cell 0 1 3 1,grow");
@@ -309,10 +320,10 @@ public class UI extends JFrame {
 		panelBotones.add(btnSalir);
 	}
 	
-	protected String getIsbn() {
+	protected String getIsbnText() {
 		return txtISBN.getText();
 	}
-	protected String getITitulo() {
+	protected String getITituloText() {
 		return txtISBN.getText();
 	}
 	protected String getPrecio() {
