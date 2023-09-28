@@ -95,6 +95,11 @@ public class Libreria {
 		
 	}
 	
+	/**
+	 * Metodo que modifica todos los campos de un libro excepto
+	 * su isbn y su stock
+	 * @param libroEditado Libro con las modificaciones
+	 */
 	public void modificarLibro(Libro libroEditado) {
 		Libro libro = getLibro(libroEditado.getIsbn());
 		libro.setTitulo(libroEditado.getTitulo());

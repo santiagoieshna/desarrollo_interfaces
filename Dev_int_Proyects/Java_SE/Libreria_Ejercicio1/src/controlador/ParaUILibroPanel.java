@@ -40,7 +40,7 @@ public class ParaUILibroPanel {
 		String formato = getFormato();
 		String estado = getEstado();
 		Integer stock = 0;
-		return new Libro(isbn, titulo, autor, editorial, precio, formato, estado, 0);
+		return new Libro(isbn, titulo, autor, editorial, precio, formato, estado, stock);
 	}
 
 

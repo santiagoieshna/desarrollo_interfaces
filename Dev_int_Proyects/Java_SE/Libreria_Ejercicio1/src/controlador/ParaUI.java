@@ -1,17 +1,14 @@
 package controlador;
 
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
+import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
+import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.JSpinner.DefaultEditor;
 
 import modelo.Libreria;
 import modelo.Libro;
@@ -40,15 +37,16 @@ public class ParaUI extends UI {
 
 		gestorLibroPanel = new ParaUILibroPanel(txtTitulo, txtISBN, txtPrecio, txtAutor, txtEditorial, grupoFormato,
 				grupoEstado);
-
-		// SALIR --------------------------------------------
+		setMaxSpinner(1);
+		
+		// SALIR -----------------------------------------------------------------------
 		btnSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 		});
 
-		// GUARDAR LIBRO ------------------------------------
+		// GUARDAR LIBRO ---------------------------------------------------------------
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -57,7 +55,7 @@ public class ParaUI extends UI {
 
 				if (esGuardar()) {
 
-					if (esISBNvalido()) {
+					if (esISBNvalido(getIsbnText())) {
 						if (libreria.estaIsbn(getIsbnText())) {
 							if (esPrecioValido()) {
 								libreria.guardarLibro(gestorLibroPanel.guardarLibro());
@@ -97,19 +95,14 @@ public class ParaUI extends UI {
 			}
 
 		});
-		// CalcularTotal -------------------------------------------
+		
+		// CalcularTotal --------------------------------------------------------------
 		spinner.addChangeListener(e -> {
-			if (validarVentaValida()) {
-				// TODO
-			}
-			Integer cantidad = Integer.parseInt(getCantidadVenta());
-			Float precioUnidad = Float.parseFloat(textPrecioVenta.getText());
-			Float total = cantidad * precioUnidad;
-			lblTotalVenta.setText(total.toString());
-			
-
+			if(validarVentaValida())
+					setPrecioVenta();
 		});
-		// LIMPIAR CAMPOS -------------------------------------------
+		
+		// LIMPIAR CAMPOS -------------------------------------------------------------
 		btnLimpiar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				gestorLibroPanel.limpiarCampos();
@@ -118,7 +111,8 @@ public class ParaUI extends UI {
 			}
 
 		});
-		// Borrar libro ----------------------------------------------
+		
+		// Borrar libro ---------------------------------------------------------------
 		btnBorrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (gestorTabla.tablaEstaSeleccionada()) {
@@ -130,7 +124,7 @@ public class ParaUI extends UI {
 
 		});
 
-		// BUSCAR libro ----------------------------------------------
+		// BUSCAR libro ----------------------------------------------------------------
 		btnBuscar.addActionListener(e -> {
 
 			if (!textBuscador.getText().equals("")) {
@@ -141,35 +135,23 @@ public class ParaUI extends UI {
 
 		});
 
-		filtro.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getExtendedKeyCode() == KeyEvent.VK_ENTER) {
-					btnBuscar.doClick();
-				}
-			}
-		});
 
-		// IR a VENTA -----------------------------------------------
+		// IR a VENTA ------------------------------------------------------------------
 		btnVender.addActionListener(e -> {
 			
 				if (gestorTabla.tablaEstaSeleccionada()) {
 					String isbn = gestorTabla.getIsbnTable();
 					Libro libro = libreria.getLibro(isbn);
-					if (libro.getStock() >= 1) {
-
-						activarTab(Tabs.VENDER);
-						rellenarCamposParaVender(libro);
-						gestorLibroPanel.desabilitarISBNCampo();
-						spinner.setValue(1);
-						// new SpinnerNumberModel(valorInicial, minimo, maximo, Salto)
-						spinner.setModel(new SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1),
-								libreria.getLibro(isbn).getStock(), Integer.valueOf(1)));
-						((DefaultEditor) spinner.getEditor()).getTextField().setEditable(false);
+					activarTab(Tabs.VENDER);
+					rellenarCamposParaVender(libro);
+					gestorLibroPanel.desabilitarISBNCampo();
+					spinner.setValue(1);
+					// new SpinnerNumberModel(valorInicial, minimo, maximo, Salto)
+					setMaxSpinner(libreria.getLibro(isbn).getStock());
+					if (libro.hayStock()) {
+						habilitarVenta();
 					} else {
-						String mensaje = "El libro seleccioando esta fuera de Stock";
-						String tituloMensaje = "Fuera de stock";
-						gestorMensajes.mensajeError(tituloMensaje, mensaje);
+						deshabilitarVenta();
 					}
 				} else {
 					String mensaje = "No has seleccionado ningun Libro";
@@ -180,22 +162,38 @@ public class ParaUI extends UI {
 			
 
 		});
-
-		// 1 Click para coger ISBN --> Boton borrar lo elimina ------------
-		tableLibreria.addMouseListener(new java.awt.event.MouseAdapter() {
-			@Override
-			public void mouseClicked(java.awt.event.MouseEvent evt) {
-				// TODO Algo hara, pero no será hoy
-
+		
+		// REALIZAR VENTA ---------------------------------------------------------------------
+		btnRealizarVenta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String isbn = txtIsbnVenta.getText().toString();
+				Libro libro = libreria.getLibro(isbn);
+				/*
+				 * Esta validacion de si hay stock sobra, el programa deberia de ir bien para 
+				 * nunca vender sin stock, pero servira de cortafuegos por si se escapa cualquier
+				 * factor no contemplado.
+				 * Pd: Jose me mataria, porque diria que si esta bien programado no hara falta, el boton
+				 * siempre estaria deshabilitado.
+				 */
+				if(libro.hayStock()) {
+					Integer cantidad = Integer.parseInt(spinner.getValue().toString());
+					Boolean vendido = venderLibro(libro, cantidad);
+					gestorTabla.cargarTabla(libreria);
+				}else {
+					String mensaje = "El libro seleccioando esta fuera de Stock";
+					String tituloMensaje = "Fuera de stock";
+					gestorMensajes.mensajeError(tituloMensaje, mensaje);
+				}
 			}
+
+			
 		});
 
 		// LISTENER DOBLE CLICK --------------------------------------------
 		tableLibreria.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mousePressed(MouseEvent me) {
-				JTable table = (JTable) me.getSource();
-				Point p = me.getPoint();
-
+//				JTable table = (JTable) me.getSource();
+//				Point p = me.getPoint();
 				if (me.getClickCount() == 2) {
 //					int linea = table.getSelectedRow();
 					Libro libro = libreria.getLibro(gestorTabla.getIsbnTable());
@@ -206,27 +204,65 @@ public class ParaUI extends UI {
 			}
 		});
 	}
+	
+	private Boolean venderLibro(Libro libro, Integer cantidad) {
+		Boolean vendido = false;
+		Float precioCalculado = Float.parseFloat(lblTotalVenta.getText().toString());
+		Integer respuestaVenta = gestorMensajes.mensajeVenderSioNo(libro, cantidad, precioCalculado);
+		
+		if(respuestaVenta == JOptionPane.YES_OPTION) {
+			Float precioVenta = libro.venderLibro(cantidad);
+			vendido = true;
+			gestorMensajes.mensajeFactura(libro, precioVenta);
+		}
+		return vendido;
+	}
+
+	private void deshabilitarVenta() {
+		btnRealizarVenta.setEnabled(false);
+	}
+
+	private void habilitarVenta() {
+		btnRealizarVenta.setEnabled(true);
+	}
+
+	private void setMaxSpinner(Integer stock) {
+		spinner.setModel(new SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1),
+				stock, Integer.valueOf(1)));
+		ponerSpinnerNoEditable();
+	}
+
+	private void setPrecioVenta() {
+		Integer cantidad = Integer.parseInt(getCantidadVenta());
+		Libro libroVenta = libreria.getLibro(txtIsbnVenta.getText().toString());
+		Float total = libroVenta.ConsultarPrecio(cantidad);
+		lblTotalVenta.setText(total.toString());
+	}
+	
+	/**
+	 * Metodo que hace que el TextField interno del Spinner no sea editable
+	 */
+	private void ponerSpinnerNoEditable() {
+		JFormattedTextField tf = ((JSpinner.DefaultEditor) spinner.getEditor()).getTextField();
+	    tf.setEditable(false);
+	}
 
 	private boolean validarVentaValida() {
 		// si tiene el ISBN esque el panel esta relleno
-		Boolean respuesta =esISBNvalido() && Validacion.validNumero(getCantidadVenta());
-		return respuesta;
+		return esISBNvalido(txtIsbnVenta.getText().toString()) 
+				&& Validacion.validNumero(getCantidadVenta());
 	}
 
 	private String getCantidadVenta() {
 		return spinner.getValue().toString();
 	}
 
-	private Boolean validarNumero(String numero) {
-		return Validacion.validNumero(numero);
-	}
-
 	protected boolean esPrecioValido() {
 		return Validacion.validPrecio(getPrecioText());
 	}
 
-	private boolean esISBNvalido() {
-		return Validacion.validISBN(getIsbnText());
+	private boolean esISBNvalido(String isbn) {
+		return Validacion.validISBN(isbn);
 	}
 
 	private void buscar() {
@@ -264,10 +300,6 @@ public class ParaUI extends UI {
 
 	private void activarTab(Tabs vender) {
 		tabbedPane.setSelectedIndex(vender.getIndice());
-	}
-
-	private List<Libro> getLibreria() {
-		return libreria.getLibreria();
 	}
 
 	private void rellenarCamposParaVender(Libro libro) {

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--AgileJ Ltd. (http://www.agilej.com)--><ajsv>
+    <diagram creationDate="2023-sept-28 18:41" licenseGrade="single" licenseeName="AgileJ community member" licenseeOrganization="agilej-community" populationMethod="manual" version="1.9.2.v20190518-1152">
+        <filterScript>
+
+// no filter script yet defined for this class diagram
+// use CTRL+SPACE for completion suggestions
+
+</filterScript>
+        <class className="controlador.ParaUILibroPanel" modelMemberId="controlador.ParaUILibroPanel" project="Libreria_Ejercicio1" xLocation="61" yLocation="810"/>
+        <class className="vista.UI" modelMemberId="vista.UI" project="Libreria_Ejercicio1" xLocation="-364" yLocation="-36"/>
+        <class className="modelo.Libreria" modelMemberId="modelo.Libreria" project="Libreria_Ejercicio1" xLocation="1208" yLocation="-57"/>
+        <class className="controlador.ParaUI" modelMemberId="controlador.ParaUI" project="Libreria_Ejercicio1" xLocation="453" yLocation="60"/>
+        <class className="controlador.ParaUITable" modelMemberId="controlador.ParaUITable" project="Libreria_Ejercicio1" xLocation="904" yLocation="821"/>
+        <class className="modelo.Mensajes" modelMemberId="modelo.Mensajes" project="Libreria_Ejercicio1" xLocation="524" yLocation="615"/>
+        <class className="controlador.App" modelMemberId="controlador.App" project="Libreria_Ejercicio1" xLocation="489" yLocation="-80"/>
+    </diagram>
+</ajsv>

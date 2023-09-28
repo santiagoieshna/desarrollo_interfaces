@@ -12,7 +12,6 @@ import javax.swing.JButton;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Color;
-import net.miginfocom.swing.MigLayout;
 import java.awt.GridLayout;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
@@ -21,12 +20,16 @@ import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
+
+import net.miginfocom.swing.MigLayout;
+
 import javax.swing.border.CompoundBorder;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JSlider;
 import javax.swing.JScrollBar;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JSpinner;
 import javax.swing.JSpinner.DefaultEditor;
 
@@ -89,7 +92,8 @@ public class UI extends JFrame {
 	private JPanel panelLibreria;
 	protected JButton btnBuscar;
 	protected JComboBox filtro;
-	
+	protected JButton btnRealizarVenta;
+	protected JButton btnComprar;
 
 
 	/**
@@ -121,7 +125,8 @@ public class UI extends JFrame {
 		JPanel panelLibro = new JPanel();
 		panelLibro.setBackground(new Color(202, 232, 232));
 		tabbedPane.addTab("Libro", null, panelLibro, null);
-		panelLibro.setLayout(new MigLayout("", "[129.00px][235px,grow,right][350px,grow]", "[grow][grow][grow][grow][grow][grow][grow]"));
+		panelLibro.setLayout(new MigLayout("", "[129.00px][235px,grow,right][350px,grow]",
+				"[grow][grow][grow][grow][grow][grow][grow]"));
 		
 		JLabel lblISBN = new JLabel("ISBN");
 		panelLibro.add(lblISBN, "cell 0 0,grow");
@@ -237,8 +242,9 @@ public class UI extends JFrame {
 		
 		panelVenta = new JPanel();
 		panelVenta.setBackground(new Color(202, 232, 232));
-		tabbedPane.addTab("Venta", null, panelVenta, null);
-		panelVenta.setLayout(new MigLayout("", "[50,center][50,fill][150,center][96.00][80,grow]", "[40,center][40][40][40][40][40][40][40]"));
+		tabbedPane.addTab("Compra/Venta", null, panelVenta, null);
+		panelVenta.setLayout(new MigLayout("", "[50,center][50,fill][150,center][96.00][80,grow]", 
+				"[40,center][40][40][40][40][40][40][40]"));
 		
 		lblIsnV = new JLabel("ISBN");
 		panelVenta.add(lblIsnV, "cell 1 0,alignx trailing");
@@ -296,6 +302,9 @@ public class UI extends JFrame {
 		textPrecioVenta.setColumns(10);
 		panelVenta.add(textPrecioVenta, "cell 2 6,growx");
 		
+		btnComprar = new JButton("Realizar Compra");
+		panelVenta.add(btnComprar, "cell 4 6");
+		
 		lblTotal = new JLabel("Total");
 		panelVenta.add(lblTotal, "cell 1 7");
 		
@@ -303,11 +312,17 @@ public class UI extends JFrame {
 		panelVenta.add(lblTotalVenta, "cell 2 7");
 		
 		spinner = new JSpinner();
+		
 		spinner.setSize(new Dimension(10, 0));
 		
-		spinner.setModel(new SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
+		spinner.setModel(new SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1),
+				null, Integer.valueOf(1)));
 
 		panelVenta.add(spinner, "cell 3 7");
+		
+		btnRealizarVenta = new JButton("Realizar Venta");
+		btnRealizarVenta.setEnabled(false);
+		panelVenta.add(btnRealizarVenta, "cell 4 7,alignx center,aligny center");
 		
 		JPanel panelBotones = new JPanel();
 		contentPane.add(panelBotones, BorderLayout.SOUTH);
@@ -322,7 +337,7 @@ public class UI extends JFrame {
 		btnBorrar = new JButton("Borrar");
 		panelBotones.add(btnBorrar);
 		
-		btnVender = new JButton("Vender");
+		btnVender = new JButton("Compra/Venta");
 		
 		panelBotones.add(btnVender);
 		
