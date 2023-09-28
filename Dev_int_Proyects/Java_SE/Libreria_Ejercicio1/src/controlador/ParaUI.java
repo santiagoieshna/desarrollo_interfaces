@@ -11,6 +11,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.JSpinner.DefaultEditor;
 
 import modelo.Libreria;
 import modelo.Libro;
@@ -56,7 +57,7 @@ public class ParaUI extends UI {
 
 				if (esGuardar()) {
 
-					if (esISBvalido()) {
+					if (esISBNvalido()) {
 						if (libreria.estaIsbn(getIsbnText())) {
 							if (esPrecioValido()) {
 								libreria.guardarLibro(gestorLibroPanel.guardarLibro());
@@ -89,24 +90,23 @@ public class ParaUI extends UI {
 						gestorLibroPanel.limpiarCampos();
 					} else
 						mensaje = "El ISBN " + getIsbnText() + "Ya existe";
-						titulo = "Libro Existente";
-						gestorMensajes.mensajeError(titulo, mensaje);
+					titulo = "Libro Existente";
+					gestorMensajes.mensajeError(titulo, mensaje);
 				}
 				gestorTabla.cargarTabla(libreria);
-			}
-
-			private boolean esISBvalido() {
-				// TODO Auto-generated method stub
-				return false;
 			}
 
 		});
 		// CalcularTotal -------------------------------------------
 		spinner.addChangeListener(e -> {
-			Integer cantidad = Integer.parseInt(spinner.getValue().toString());
+			if (validarVentaValida()) {
+				// TODO
+			}
+			Integer cantidad = Integer.parseInt(getCantidadVenta());
 			Float precioUnidad = Float.parseFloat(textPrecioVenta.getText());
 			Float total = cantidad * precioUnidad;
 			lblTotalVenta.setText(total.toString());
+			
 
 		});
 		// LIMPIAR CAMPOS -------------------------------------------
@@ -152,29 +152,32 @@ public class ParaUI extends UI {
 
 		// IR a VENTA -----------------------------------------------
 		btnVender.addActionListener(e -> {
-			if (gestorTabla.tablaEstaSeleccionada()) {
-				String isbn = gestorTabla.getIsbnTable();
-				Libro libro = libreria.getLibro(isbn);
-				if (libro.getStock() >= 1) {
+			
+				if (gestorTabla.tablaEstaSeleccionada()) {
+					String isbn = gestorTabla.getIsbnTable();
+					Libro libro = libreria.getLibro(isbn);
+					if (libro.getStock() >= 1) {
 
-					activarTab(Tabs.VENDER);
-					rellenarCamposParaVender(libro);
-					gestorLibroPanel.desabilitarISBNCampo();
-					spinner.setValue(1);
-					// new SpinnerNumberModel(valorInicial, minimo, maximo, Salto)
-					spinner.setModel(new SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1),
-							libreria.getLibro(isbn).getStock(), Integer.valueOf(1)));
+						activarTab(Tabs.VENDER);
+						rellenarCamposParaVender(libro);
+						gestorLibroPanel.desabilitarISBNCampo();
+						spinner.setValue(1);
+						// new SpinnerNumberModel(valorInicial, minimo, maximo, Salto)
+						spinner.setModel(new SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1),
+								libreria.getLibro(isbn).getStock(), Integer.valueOf(1)));
+						((DefaultEditor) spinner.getEditor()).getTextField().setEditable(false);
+					} else {
+						String mensaje = "El libro seleccioando esta fuera de Stock";
+						String tituloMensaje = "Fuera de stock";
+						gestorMensajes.mensajeError(tituloMensaje, mensaje);
+					}
 				} else {
-					String mensaje = "El libro seleccioando esta fuera de Stock";
-					String tituloMensaje = "Fuera de stock";
+					String mensaje = "No has seleccionado ningun Libro";
+					String tituloMensaje = "Libro no sleccionado";
 					gestorMensajes.mensajeError(tituloMensaje, mensaje);
-				}
-			} else {
-				String mensaje = "No has seleccionado ningun Libro";
-				String tituloMensaje = "Libro no sleccionado";
-				gestorMensajes.mensajeError(tituloMensaje, mensaje);
 
-			}
+				}
+			
 
 		});
 
@@ -204,9 +207,26 @@ public class ParaUI extends UI {
 		});
 	}
 
+	private boolean validarVentaValida() {
+		// si tiene el ISBN esque el panel esta relleno
+		Boolean respuesta =esISBNvalido() && Validacion.validNumero(getCantidadVenta());
+		return respuesta;
+	}
+
+	private String getCantidadVenta() {
+		return spinner.getValue().toString();
+	}
+
+	private Boolean validarNumero(String numero) {
+		return Validacion.validNumero(numero);
+	}
+
 	protected boolean esPrecioValido() {
-		// TODO Auto-generated method stub
-		return false;
+		return Validacion.validPrecio(getPrecioText());
+	}
+
+	private boolean esISBNvalido() {
+		return Validacion.validISBN(getIsbnText());
 	}
 
 	private void buscar() {

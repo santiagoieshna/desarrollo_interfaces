@@ -28,6 +28,8 @@ import javax.swing.JSlider;
 import javax.swing.JScrollBar;
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
+import javax.swing.JSpinner.DefaultEditor;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.SpinnerNumberModel;
@@ -231,7 +233,6 @@ public class UI extends JFrame {
 		panelLibreria.add(scrollPane, "cell 0 1 3 1,grow");
 		
 		tableLibreria = new JTable();
-//		tableLibreria.selec
 		scrollPane.setViewportView(tableLibreria);
 		
 		panelVenta = new JPanel();
@@ -303,6 +304,7 @@ public class UI extends JFrame {
 		
 		spinner = new JSpinner();
 		spinner.setSize(new Dimension(10, 0));
+		
 		spinner.setModel(new SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
 
 		panelVenta.add(spinner, "cell 3 7");
@@ -336,7 +338,7 @@ public class UI extends JFrame {
 	protected String getITituloText() {
 		return txtISBN.getText();
 	}
-	protected String getPrecio() {
+	protected String getPrecioText() {
 		return txtISBN.getText();
 	}
 	protected String getTitulo() {
