@@ -26,6 +26,10 @@ public class Validacion {
 	public static Boolean cumpleMetricas50(String campo) {
 		return Pattern.matches("{50}$", campo);
 	}
+
+	public static boolean isNumero(String numero) {
+		return Pattern.matches("[0-9]{1,2}", numero);
+	}
 	
 	
 }

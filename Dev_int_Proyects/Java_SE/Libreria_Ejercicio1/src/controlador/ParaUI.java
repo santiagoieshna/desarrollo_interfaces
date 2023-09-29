@@ -147,12 +147,14 @@ public class ParaUI extends UI {
 					gestorLibroPanel.desabilitarISBNCampo();
 					spinner.setValue(1);
 					// new SpinnerNumberModel(valorInicial, minimo, maximo, Salto)
-					setMaxSpinner(libreria.getLibro(isbn).getStock());
+					
 					if (libro.hayStock()) {
+						setMaxSpinner(libreria.getLibro(isbn).getStock());
 						habilitarVenta();
-					} else {
-						deshabilitarVenta();
 					}
+					 else 
+						deshabilitarVenta();
+					
 				} else {
 					String mensaje = "No has seleccionado ningun Libro";
 					String tituloMensaje = "Libro no sleccionado";
@@ -176,9 +178,10 @@ public class ParaUI extends UI {
 				 * siempre estaria deshabilitado.
 				 */
 				if(libro.hayStock()) {
-					Integer cantidad = Integer.parseInt(spinner.getValue().toString());
+					Integer cantidad = Integer.parseInt(getCantidad());
 					Boolean vendido = venderLibro(libro, cantidad);
 					gestorTabla.cargarTabla(libreria);
+					setMaxSpinner(libro.getStock());
 				}else {
 					String mensaje = "El libro seleccioando esta fuera de Stock";
 					String tituloMensaje = "Fuera de stock";
@@ -187,6 +190,26 @@ public class ParaUI extends UI {
 			}
 
 			
+		});
+		
+		// REALIZAR COMPRA ------------------------------------------------------------
+		btnComprar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(validarVentaValida()) {
+					 String mensaje = "¿Cuantas unidades quieres comprar?";
+					 String titulo  = "Comprar "+ txtTituloVenta.getText().toString();
+					 String cantidadInput = JOptionPane.showInputDialog(contentPane, mensaje, titulo , JOptionPane.DEFAULT_OPTION);
+					 if(Validacion.isNumero(cantidadInput)) {						 
+						 Integer cantidadCompra = Integer.parseInt(cantidadInput);
+						 Libro libro = libreria.getLibro(txtIsbnVenta.getText().toString());
+						 Float compraTotal = libro.comprarLibro(cantidadCompra);
+						 gestorMensajes.mensajeInfo( "Precio de la Compra", compraTotal.toString()+"€");
+						 setMaxSpinner(libro.getStock());
+						 lblTotalVenta.setText(libro.ConsultarPrecio(1).toString());
+					
+					 }
+				}
+			}
 		});
 
 		// LISTENER DOBLE CLICK --------------------------------------------
@@ -254,7 +277,7 @@ public class ParaUI extends UI {
 	}
 
 	private String getCantidadVenta() {
-		return spinner.getValue().toString();
+		return getCantidad();
 	}
 
 	protected boolean esPrecioValido() {
@@ -312,7 +335,11 @@ public class ParaUI extends UI {
 		txtFormatoVenta.setText(libro.getFormato());
 		txtEstadoVenta.setText(libro.getEstado());
 		textPrecioVenta.setText(libro.getPrecio().toString());
-		lblTotalVenta.setText(libro.getPrecio().toString());
+		lblTotalVenta.setText(libro.ConsultarPrecio(Integer.parseInt(getCantidad())).toString());
+	}
+
+	private String getCantidad() {
+		return spinner.getValue().toString();
 	}
 
 	private boolean esGuardar() {

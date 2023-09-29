@@ -45,10 +45,10 @@ public class Libro {
 	public Float venderLibro(Integer cantidad) {
 		Float precioVenta = -1f;
 		if (this.getStock() >= cantidad) {
-			ActualizarStock(cantidad);
+			Integer stockDiferencia = cantidad * (-1);
+			ActualizarStock(stockDiferencia);
 			precioVenta = this.getPrecio() * cantidad*(1+INTERES_VENTA);
 		}
-		
 		return precioVenta;
 	}
 	
@@ -57,14 +57,19 @@ public class Libro {
 		return libroClonado.venderLibro(cantidad);
 	}
 	
+	public Float comprarLibro(Integer cantidad) {
+		ActualizarStock(cantidad);
+		return this.getPrecio()*cantidad;
+	}
+	
 	/**
 	 * Metodo que actualiza el Stock cuando haya una modificacion de ello.
 	 * @param cantidad
 	 */
 	private void ActualizarStock(Integer cantidad) {
-		this.setStock(this.getStock() - cantidad);
+		this.setStock(this.getStock() + cantidad);
 	}
-
+	
 	public Integer getStock() {
 		return stock;
 	}

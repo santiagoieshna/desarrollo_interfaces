@@ -303,7 +303,8 @@ public class UI extends JFrame {
 		panelVenta.add(textPrecioVenta, "cell 2 6,growx");
 		
 		btnComprar = new JButton("Realizar Compra");
-		panelVenta.add(btnComprar, "cell 4 6");
+		
+		panelVenta.add(btnComprar, "cell 4 6,alignx center");
 		
 		lblTotal = new JLabel("Total");
 		panelVenta.add(lblTotal, "cell 1 7");
