@@ -38,7 +38,7 @@ public class Mensajes {
 				mensaje, titulo , JOptionPane.YES_NO_OPTION);
 	}
 
-	public void mensajeFactura(Libro libro, Float precioVenta) {	
+	public void mensajeInformeLibro(Libro libro,String titulo) {	
 		mensajeInfo("Ejemplar Vendido", libro.toString());
 	}
 	

@@ -50,7 +50,7 @@ public class LibroObjectMother {
 				"Espiral", "Reedición", 7));
 		libreria.addLibro(new Libro("9780743273577", "Pride and Prejudice",
 				"Jane Austen", "Penguin Classics", 9.95f,
-				"Rústico", "Reedición", 4));
+				"Rústica", "Reedición", 4));
 		libreria.addLibro(new Libro("9780452284234", "The Bell Jar",
 				"Sylvia Plath", "Harper Perennial Modern Classics",
 				8.99f, "Grapada", "Reedición", 6));

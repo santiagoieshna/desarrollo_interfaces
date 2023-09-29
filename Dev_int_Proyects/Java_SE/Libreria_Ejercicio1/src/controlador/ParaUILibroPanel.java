@@ -32,11 +32,11 @@ public class ParaUILibroPanel {
 	}
 
 	public Libro guardarLibro() {
-		String isbn = txtISBN.getText();
-		String autor = txtAutor.getText();
-		String titulo = txtTitulo.getText();
-		String editorial = txtEditorial.getText();
-		Float precio = Float.parseFloat(txtPrecio.getText());
+		String isbn = txtISBN.getText().toString();
+		String autor = txtAutor.getText().toString();
+		String titulo = txtTitulo.getText().toString();
+		String editorial = txtEditorial.getText().toString();
+		Float precio = Float.parseFloat(txtPrecio.getText().toString());
 		String formato = getFormato();
 		String estado = getEstado();
 		Integer stock = 0;
@@ -99,11 +99,11 @@ public class ParaUILibroPanel {
 		txtISBN.setEditable(true);
 	}
 
-	private String getFormato() {
+	public String getFormato() {
 		return grupoFormato.getSelection().getActionCommand();
 	}
 
-	private String getEstado() {
+	public String getEstado() {
 		return grupoEstado.getSelection().getActionCommand();
 	}
 	public void limpiarCampos() {
@@ -124,4 +124,5 @@ public class ParaUILibroPanel {
 		grupoEstado.clearSelection();
 	}
 
+	
 }

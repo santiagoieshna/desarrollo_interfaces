@@ -348,23 +348,25 @@ public class UI extends JFrame {
 		panelBotones.add(btnSalir);
 	}
 	
-	protected String getIsbnText() {
-		return txtISBN.getText();
-	}
-	protected String getITituloText() {
-		return txtISBN.getText();
-	}
-	protected String getPrecioText() {
-		return txtISBN.getText();
-	}
 	protected String getTitulo() {
-		return txtISBN.getText();
+		return txtTitulo.getText().toString();
 	}
+
+	protected String getISBN() {
+		return txtISBN.getText().toString();
+	}
+
+	protected String getPrecio() {
+		return txtPrecio.getText().toString();
+	}
+
 	protected String getAutor() {
-		return txtISBN.getText();
+		return txtAutor.getText().toString();
 	}
+
 	protected String getEditorial() {
-		return txtISBN.getText();
+		return txtEditorial.getText().toString();
 	}
+
 
 }

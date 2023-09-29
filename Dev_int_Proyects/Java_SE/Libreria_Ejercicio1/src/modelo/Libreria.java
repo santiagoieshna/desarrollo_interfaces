@@ -59,16 +59,16 @@ public class Libreria {
 	}
 	
 	
-	public boolean estaIsbn(String isbn) {
-		boolean respuesta = false;
+	public boolean comprobarIsbn(String isbn) {
+		
 		
 		for (Libro libro : libreria) {
 			if(libro.getIsbn().equals(isbn)) {
-				respuesta = true;
+				return true;
 			}
 		}
 		
-		return respuesta;
+		return false;
 	}
 	
 	public Libro getLibro(String isbn) {
@@ -123,11 +123,9 @@ public class Libreria {
 	
 
 	public List<Libro> getListByISBN(String isbn){
-		List<Libro> librosEncontrados = libreria.stream()
-									.filter(libro-> libro.getIsbn().indexOf(isbn)!=-1)
-									.collect(Collectors.toList());
-		
-		return librosEncontrados;
+		return libreria.stream()
+				.filter(libro-> libro.getIsbn().indexOf(isbn)!=-1)
+				.collect(Collectors.toList());	
 	}
 
 	public List<Libro> getListByEditorial(String editorial) {

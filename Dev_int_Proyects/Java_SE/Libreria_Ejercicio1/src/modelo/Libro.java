@@ -132,8 +132,8 @@ public class Libro {
 	
 	@Override
 	public String toString() {
-		return "Libro \nisbn: " + isbn + "\ntitulo: " + titulo + "\nautor: " + autor + " \neditorial:" + editorial
-				+ "\nprecio:" + precio + "\nformato: " + formato + "\nestado: " + estado + "\nstock: " + stock;
+		return "Libro \nisbn: " + isbn + "\ntitulo: " + titulo + "\nautor: " + autor + " \neditorial: " + editorial
+				+ "\nprecio: " + precio + "\nformato: " + formato + "\nestado: " + estado + "\nstock: " + stock;
 	}
 
 	@Override
