@@ -13,6 +13,9 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Toolkit;
+
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -100,6 +103,8 @@ public class UI extends JFrame {
 	 * Create the frame.
 	 */
 	public UI() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(UI.class.getResource("/res/imagenes/iconoApp.png")));
+		setTitle("SantiBook");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 712, 508);
@@ -348,6 +353,16 @@ public class UI extends JFrame {
 		panelBotones.add(btnSalir);
 	}
 	
+	// Icono del JFrame
+	@Override
+	public Image getIconImage() {
+		Image retValue = Toolkit.getDefaultToolkit()
+						.getImage(ClassLoader.getSystemResource("res/imagenes/iconoApp.png"));
+		
+		return retValue;
+	}
+	
+
 	protected String getTitulo() {
 		return txtTitulo.getText().toString();
 	}
