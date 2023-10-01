@@ -7,12 +7,17 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTabbedPane;
 import javax.swing.JLabel;
+import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
+
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -35,11 +40,18 @@ import javax.swing.JSpinner.DefaultEditor;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
 import javax.swing.SpinnerNumberModel;
 import java.awt.Dimension;
 import javax.swing.JTextArea;
 import javax.swing.JList;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -91,15 +103,18 @@ public class UI extends JFrame {
 	protected JTextField textBuscador;
 	private JPanel panelLibreria;
 	protected JButton btnBuscar;
-	protected JComboBox filtro;
+	protected JComboBox<String> filtro;
 	protected JButton btnRealizarVenta;
 	protected JButton btnComprar;
+	private JLabel lblIcono;
 
 
 	/**
 	 * Create the frame.
 	 */
 	public UI() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(UI.class.getResource("/res/imagenes/iconoApp.png")));
+		setTitle("SantiBook");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 712, 508);
@@ -125,8 +140,7 @@ public class UI extends JFrame {
 		JPanel panelLibro = new JPanel();
 		panelLibro.setBackground(new Color(202, 232, 232));
 		tabbedPane.addTab("Libro", null, panelLibro, null);
-		panelLibro.setLayout(new MigLayout("", "[129.00px][235px,grow,right][350px,grow]",
-				"[grow][grow][grow][grow][grow][grow][grow]"));
+		panelLibro.setLayout(new MigLayout("", "[129.00px][235px,grow,right][350px,grow]", "[grow][grow][grow][grow][grow][grow][grow]"));
 		
 		JLabel lblISBN = new JLabel("ISBN");
 		panelLibro.add(lblISBN, "cell 0 0,grow");
@@ -134,6 +148,20 @@ public class UI extends JFrame {
 		txtISBN = new JTextField();
 		txtISBN.setColumns(10);
 		panelLibro.add(txtISBN, "cell 1 0,grow");
+		
+		// PONEMOS IMAGEN-------------------------------------------------------------------------
+		String imagenRuta = "src/res/imagenes/iconoGuardarLibro.png";
+		BufferedImage image = null;
+		image = cargarImagen(imagenRuta);
+		// Label para la imagen
+		lblIcono = new JLabel();
+
+		 if (image != null) {
+			 ImageIcon imageIcon = new ImageIcon(image.getScaledInstance(250, 116, Image.SCALE_SMOOTH));
+			 lblIcono.setIcon(imageIcon);
+		 }
+		
+		panelLibro.add(lblIcono, "cell 2 0 1 5,alignx center,aligny center");
 		
 		JLabel lblTitulo = new JLabel("Titulo");
 		panelLibro.add(lblTitulo, "cell 0 1,grow");
@@ -348,6 +376,51 @@ public class UI extends JFrame {
 		panelBotones.add(btnSalir);
 	}
 	
+	private BufferedImage cargarImagen(String imagenRuta) {
+		
+		try {
+			return ImageIO.read(new File(imagenRuta));
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private void SetImageLabel(JLabel etiqueta, String ruta) {
+		ImageIcon image = new ImageIcon(ruta);
+		
+		Icon icon = new ImageIcon(
+				image.getImage()
+				.getScaledInstance(
+						etiqueta.getWidth(), etiqueta.getHeight(), Image.SCALE_DEFAULT)
+				);
+		etiqueta.setIcon(icon);
+		etiqueta.repaint();
+	}
+	
+	private void SetImageLabel(JLabel etiqueta, String ruta, int ancho, int largo) {
+		ImageIcon image = new ImageIcon(ruta);
+		
+		Icon icon = new ImageIcon(
+				image.getImage()
+				.getScaledInstance(
+						ancho, largo, Image.SCALE_DEFAULT)
+				);
+		etiqueta.setIcon(icon);
+		etiqueta.repaint();
+	}
+	
+	// Icono del JFrame
+	@Override
+	public Image getIconImage() {
+		Image retValue = Toolkit.getDefaultToolkit()
+						.getImage(ClassLoader.getSystemResource("res/imagenes/iconoApp.png"));
+		
+		return retValue;
+	}
+	
+
 	protected String getTitulo() {
 		return txtTitulo.getText().toString();
 	}
