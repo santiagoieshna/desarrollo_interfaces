@@ -1,14 +1,12 @@
 package controlador;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
 
 import modelo.Libreria;
 import modelo.Libro;
@@ -24,6 +22,7 @@ public class ParaUI extends UI {
 	private ParaUITable gestorTabla;
 	private ParaUILibroPanel gestorLibroPanel;
 	private Mensajes gestorMensajes;
+	private ParaUIVentas gestorVentas;
 
 	public ParaUI() {
 		super();
@@ -37,7 +36,11 @@ public class ParaUI extends UI {
 
 		gestorLibroPanel = new ParaUILibroPanel(txtTitulo, txtISBN, txtPrecio, txtAutor, txtEditorial, grupoFormato,
 				grupoEstado);
-		setMaxSpinner(1);
+		
+		gestorVentas = new ParaUIVentas(spinner, lblTotalVenta, txtIsbnVenta, txtTituloVenta, txtAutorVenta,
+				txtEditorialVenta, txtFormatoVenta, textPrecioVenta, txtEstadoVenta, btnRealizarVenta);
+		
+		gestorVentas.setMaxSpinner(1);
 		
 		// SALIR -----------------------------------------------------------------------
 		btnSalir.addActionListener(new ActionListener() {
@@ -145,11 +148,14 @@ public class ParaUI extends UI {
 					// new SpinnerNumberModel(valorInicial, minimo, maximo, Salto)
 					
 					if (libro.hayStock()) {
-						setMaxSpinner(libreria.getLibro(isbn).getStock());
-						habilitarVenta();
+						gestorVentas.setMaxSpinner(libreria.getLibro(isbn).getStock());
+						gestorVentas.habilitarVenta();
 					}
-					 else 
-						deshabilitarVenta();
+					 else {	 
+						gestorVentas.deshabilitarVenta();
+						lblTotalVenta.setText("Fuera de Stock!");
+						lblTotalVenta.setForeground(Color.RED);
+					 }
 					
 				} else {
 					String mensaje = "No has seleccionado ningun Libro";
@@ -175,15 +181,21 @@ public class ParaUI extends UI {
 				 */
 				if(libro.hayStock()) {
 					Integer cantidad = Integer.parseInt(getCantidad());
-					Boolean vendido = venderLibro(libro, cantidad);
+					Boolean vendido = askVenderLibro(libro, cantidad);
+					Integer reset = 1;
+					if(vendido) {
+						libro.venderLibro(cantidad);
+						gestorMensajes.mensajeInformeLibro(libro, "Ejemplar Vendido");
+						gestorVentas.limpiarCampos();
+					}
 					gestorTabla.cargarTabla(libreria);
-					setMaxSpinner(libro.getStock());
-					limpiarCampos();
+					gestorVentas.setMaxSpinner(reset);
 				}else {
 					String mensaje = "El libro seleccioando esta fuera de Stock";
 					String tituloMensaje = "Fuera de stock";
 					gestorMensajes.mensajeError(tituloMensaje, mensaje);
 				}
+				gestorVentas.deshabilitarVenta();
 			}
 
 
@@ -197,16 +209,17 @@ public class ParaUI extends UI {
 					 String mensaje = "¿Cuantas unidades quieres comprar?";
 					 String titulo  = "Comprar "+ txtTituloVenta.getText().toString();
 					 String cantidadInput = JOptionPane.showInputDialog(contentPane, mensaje, titulo , JOptionPane.DEFAULT_OPTION);
-					 if(Validacion.isNumero(cantidadInput)) {						 
+					 if(cantidadInput !=null && Validacion.isNumero(cantidadInput)) {						 
 						 Integer cantidadCompra = Integer.parseInt(cantidadInput);
 						 Libro libro = libreria.getLibro(txtIsbnVenta.getText().toString());
 						 Float compraTotal = libro.comprarLibro(cantidadCompra);
 						 gestorMensajes.mensajeInfo( "Precio de la Compra", compraTotal.toString()+"€");
-						 setMaxSpinner(libro.getStock());
+						 gestorVentas.setMaxSpinner(libro.getStock());
 						 lblTotalVenta.setText(libro.ConsultarPrecio(1).toString());
-					
+						 lblTotalVenta.setForeground(Color.BLACK);
 					 }
 				}
+				gestorTabla.cargarTabla(libreria);
 			}
 		});
 
@@ -223,33 +236,14 @@ public class ParaUI extends UI {
 		});
 	}
 	
-	private Boolean venderLibro(Libro libro, Integer cantidad) {
+	private Boolean askVenderLibro(Libro libro, Integer cantidad) {
 		Boolean vendido = false;
 		Float precioCalculado = Float.parseFloat(lblTotalVenta.getText().toString());
 		Integer respuestaVenta = gestorMensajes.mensajeVenderSioNo(libro, cantidad, precioCalculado);
-		
-		if(respuestaVenta == JOptionPane.YES_OPTION) {
-			Float precioVenta = libro.venderLibro(cantidad);
-			vendido = true;
-			String titulo = "Ejemplar vendido";
-			gestorMensajes.mensajeInformeLibro(libro, titulo);
-		}
+		vendido = (respuestaVenta == JOptionPane.YES_OPTION)? true:false;
 		return vendido;
 	}
-
-	private void deshabilitarVenta() {
-		btnRealizarVenta.setEnabled(false);
-	}
-
-	private void habilitarVenta() {
-		btnRealizarVenta.setEnabled(true);
-	}
-
-	private void setMaxSpinner(Integer stock) {
-		spinner.setModel(new SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1),
-				stock, Integer.valueOf(1)));
-		ponerSpinnerNoEditable();
-	}
+	
 
 	private void setPrecioVenta() {
 		Integer cantidad = Integer.parseInt(getCantidadVenta());
@@ -258,13 +252,7 @@ public class ParaUI extends UI {
 		lblTotalVenta.setText(total.toString());
 	}
 	
-	/**
-	 * Metodo que hace que el TextField interno del Spinner no sea editable
-	 */
-	private void ponerSpinnerNoEditable() {
-		JFormattedTextField tf = ((JSpinner.DefaultEditor) spinner.getEditor()).getTextField();
-	    tf.setEditable(false);
-	}
+	
 
 	private boolean validarVentaValida() {
 		// si tiene el ISBN esque el panel esta relleno
@@ -277,16 +265,7 @@ public class ParaUI extends UI {
 	}
 	
 
-	private void limpiarCampos() {
-		lblTotalVenta.setText("");
-		txtIsbnVenta.setText("");
-		txtTituloVenta.setText("");
-		txtAutorVenta.setText("");
-		txtEditorialVenta.setText("");
-		txtFormatoVenta.setText("");
-		txtEstadoVenta.setText("");
-		setMaxSpinner(1);
-	}
+
 
 	protected boolean esPrecioValido() {
 		return Validacion.validPrecio(getPrecio());
@@ -342,6 +321,7 @@ public class ParaUI extends UI {
 		txtEstadoVenta.setText(libro.getEstado());
 		textPrecioVenta.setText(libro.getPrecio().toString());
 		lblTotalVenta.setText(libro.ConsultarPrecio(Integer.parseInt(getCantidad())).toString());
+		lblTotalVenta.setForeground(Color.BLACK);
 	}
 
 	private String getCantidad() {
@@ -355,8 +335,6 @@ public class ParaUI extends UI {
 	private boolean sonCamposValidos() {
 		Boolean respuesta = true;
 		
-		String[] campos = {txtISBN.getText().toString(),txtTitulo.toString(),
-				};
 		String mensaje;
 		String titulo;
 		

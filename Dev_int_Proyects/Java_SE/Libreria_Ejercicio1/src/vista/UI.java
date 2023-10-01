@@ -73,8 +73,8 @@ public class UI extends JFrame {
 	private JLabel lblTituloVenta;
 	private JLabel lblAutorVentas;
 	private JLabel lblEditorialVentas;
-	private JLabel lblPrecioVenta;
 	private JLabel lblEstado;
+	private JLabel lblPrecioVenta;
 	protected JTextField txtIsbnVenta;
 	protected JTextField txtTituloVenta;
 	protected JTextField txtAutorVenta;
