@@ -178,12 +178,14 @@ public class ParaUI extends UI {
 					Boolean vendido = venderLibro(libro, cantidad);
 					gestorTabla.cargarTabla(libreria);
 					setMaxSpinner(libro.getStock());
+					limpiarCampos();
 				}else {
 					String mensaje = "El libro seleccioando esta fuera de Stock";
 					String tituloMensaje = "Fuera de stock";
 					gestorMensajes.mensajeError(tituloMensaje, mensaje);
 				}
 			}
+
 
 			
 		});
@@ -272,6 +274,18 @@ public class ParaUI extends UI {
 
 	private String getCantidadVenta() {
 		return getCantidad();
+	}
+	
+
+	private void limpiarCampos() {
+		lblTotalVenta.setText("");
+		txtIsbnVenta.setText("");
+		txtTituloVenta.setText("");
+		txtAutorVenta.setText("");
+		txtEditorialVenta.setText("");
+		txtFormatoVenta.setText("");
+		txtEstadoVenta.setText("");
+		setMaxSpinner(1);
 	}
 
 	protected boolean esPrecioValido() {
