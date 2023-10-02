@@ -37,7 +37,14 @@ public class ParaUITable {
 
 	private void setColums(String[] nombresColumnas, String[][] filasTabla) {
 		// Aqui creamos la Tabla
-		DefaultTableModel tablaCompleta = new DefaultTableModel(filasTabla, nombresColumnas);
+		DefaultTableModel tablaCompleta = new DefaultTableModel(filasTabla, nombresColumnas) {
+			// PAra que las celdas no sean editables
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+
+		};
 		// tableLibreria es el molde donde puede haber tablas, pero esta no es una
 		// tabla, si no el molde
 		tableLibreria.setModel(tablaCompleta);

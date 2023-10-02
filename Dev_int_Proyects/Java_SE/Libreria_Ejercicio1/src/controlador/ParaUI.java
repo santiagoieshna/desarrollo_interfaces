@@ -34,12 +34,15 @@ public class ParaUI extends UI {
 
 		gestorMensajes = new Mensajes(this.contentPane);
 
-		gestorLibroPanel = new ParaUILibroPanel(txtTitulo, txtISBN, txtPrecio, txtAutor, txtEditorial, grupoFormato,
-				grupoEstado);
+		gestorLibroPanel = new ParaUILibroPanel(txtTitulo, txtISBN, txtPrecio, txtAutor,
+				txtEditorial, grupoFormato, grupoEstado);
 		
-		gestorVentas = new ParaUIVentas(spinner, lblTotalVenta, txtIsbnVenta, txtTituloVenta, txtAutorVenta,
-				txtEditorialVenta, txtFormatoVenta, textPrecioVenta, txtEstadoVenta, btnRealizarVenta);
+		gestorVentas = new ParaUIVentas(spinner, lblTotalVenta, txtIsbnVenta, txtTituloVenta,
+				txtAutorVenta,txtEditorialVenta, txtFormatoVenta, textPrecioVenta, 
+				txtEstadoVenta, btnRealizarVenta, lblStock);
 		
+		
+		// Iniciamos Spinner aqui para negar el editar tambien
 		gestorVentas.setMaxSpinner(1);
 		
 		// SALIR -----------------------------------------------------------------------
@@ -142,7 +145,7 @@ public class ParaUI extends UI {
 					String isbn = gestorTabla.getIsbnTable();
 					Libro libro = libreria.getLibro(isbn);
 					activarTab(Tabs.VENDER);
-					rellenarCamposParaVender(libro);
+					gestorVentas.rellenarCamposParaVender(libro);
 					gestorLibroPanel.desabilitarISBNCampo();
 					spinner.setValue(1);
 					// new SpinnerNumberModel(valorInicial, minimo, maximo, Salto)
@@ -180,12 +183,13 @@ public class ParaUI extends UI {
 				 * siempre estaria deshabilitado.
 				 */
 				if(libro.hayStock()) {
-					Integer cantidad = Integer.parseInt(getCantidad());
+					Integer cantidad = gestorVentas.getCantidad();
 					Boolean vendido = askVenderLibro(libro, cantidad);
 					Integer reset = 1;
 					if(vendido) {
 						libro.venderLibro(cantidad);
-						gestorMensajes.mensajeInformeLibro(libro, "Ejemplar Vendido");
+						String titulo = "Ejemplar Vendido";
+						gestorMensajes.mensajeInformeLibro(libro, titulo);
 						gestorVentas.limpiarCampos();
 					}
 					gestorTabla.cargarTabla(libreria);
@@ -215,8 +219,10 @@ public class ParaUI extends UI {
 						 Float compraTotal = libro.comprarLibro(cantidadCompra);
 						 gestorMensajes.mensajeInfo( "Precio de la Compra", compraTotal.toString()+"€");
 						 gestorVentas.setMaxSpinner(libro.getStock());
-						 lblTotalVenta.setText(libro.ConsultarPrecio(1).toString());
+						 gestorVentas.setStockVentas(libro.getStock());
+						 lblTotalVenta.setText(libro.ConsultarPrecio(gestorVentas.getCantidad()).toString());
 						 lblTotalVenta.setForeground(Color.BLACK);
+						 gestorVentas.habilitarVenta();
 					 }
 				}
 				gestorTabla.cargarTabla(libreria);
@@ -244,34 +250,21 @@ public class ParaUI extends UI {
 		return vendido;
 	}
 	
-
 	private void setPrecioVenta() {
-		Integer cantidad = Integer.parseInt(getCantidadVenta());
+		Integer cantidad = gestorVentas.getCantidad();
 		Libro libroVenta = libreria.getLibro(txtIsbnVenta.getText().toString());
 		Float total = libroVenta.ConsultarPrecio(cantidad);
 		lblTotalVenta.setText(total.toString());
 	}
 	
-	
-
 	private boolean validarVentaValida() {
 		// si tiene el ISBN esque el panel esta relleno
 		return Validacion.validISBN(txtIsbnVenta.getText().toString()) 
-				&& Validacion.validNumero(getCantidadVenta());
+				&& Validacion.validNumero(gestorVentas.getCantidad().toString());
 	}
-
-	private String getCantidadVenta() {
-		return getCantidad();
-	}
-	
-
-
-
 	protected boolean esPrecioValido() {
 		return Validacion.validPrecio(getPrecio());
 	}
-
-	
 
 	private void buscar() {
 		if (filtro.getSelectedItem().toString().equals("ISBN")) {
@@ -308,24 +301,6 @@ public class ParaUI extends UI {
 
 	private void activarTab(Tabs tab) {
 		tabbedPane.setSelectedIndex(tab.getIndice());
-	}
-
-	private void rellenarCamposParaVender(Libro libro) {
-
-		// ------ Metemos campos
-		txtIsbnVenta.setText(libro.getIsbn());
-		txtTituloVenta.setText(libro.getTitulo());
-		txtEditorialVenta.setText(libro.getEditorial());
-		txtAutorVenta.setText(libro.getAutor());
-		txtFormatoVenta.setText(libro.getFormato());
-		txtEstadoVenta.setText(libro.getEstado());
-		textPrecioVenta.setText(libro.getPrecio().toString());
-		lblTotalVenta.setText(libro.ConsultarPrecio(Integer.parseInt(getCantidad())).toString());
-		lblTotalVenta.setForeground(Color.BLACK);
-	}
-
-	private String getCantidad() {
-		return spinner.getValue().toString();
 	}
 
 	private boolean esGuardar() {

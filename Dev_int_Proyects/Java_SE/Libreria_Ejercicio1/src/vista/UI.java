@@ -107,7 +107,8 @@ public class UI extends JFrame {
 	protected JButton btnRealizarVenta;
 	protected JButton btnComprar;
 	private JLabel lblIcono;
-	private JLabel lblNewLabel_1;
+	private JLabel lblIconVenta;
+	protected JLabel lblStock;
 
 
 	/**
@@ -141,15 +142,15 @@ public class UI extends JFrame {
 		
 		JPanel panelLibro = new JPanel();
 		panelLibro.setBackground(new Color(202, 232, 232));
-		tabbedPane.addTab("Libro", null, panelLibro, null);
-		panelLibro.setLayout(new MigLayout("", "[129.00px][235px,grow,right][350px,grow]", "[grow][grow][grow][grow][grow][grow][grow]"));
+		tabbedPane.addTab("Libro", new ImageIcon(UI.class.getResource("/res/iconos/icon_libro_cute_color_16px.png")), panelLibro, null);
+		panelLibro.setLayout(new MigLayout("", "[129.00px][235px,grow,right][350px]", "[grow][grow][grow][grow][grow][grow][grow]"));
 		
 		JLabel lblISBN = new JLabel("ISBN");
 		panelLibro.add(lblISBN, "cell 0 0,grow");
 		
 		txtISBN = new JTextField();
 		txtISBN.setColumns(10);
-		panelLibro.add(txtISBN, "cell 1 0,grow");
+		panelLibro.add(txtISBN, "cell 1 0,growx");
 		
 		// PONEMOS IMAGEN-------------------------------------------------------------------------
 		String imagenRuta = "src/res/imagenes/iconoGuardarLibro.png";
@@ -171,7 +172,7 @@ public class UI extends JFrame {
 		panelLibro.add(lblTitulo, "cell 0 1,grow");
 		
 		txtTitulo = new JTextField();
-		panelLibro.add(txtTitulo, "cell 1 1,grow");
+		panelLibro.add(txtTitulo, "cell 1 1,growx");
 		txtTitulo.setColumns(10);
 		
 		JLabel lblAutor = new JLabel("Autor");
@@ -179,21 +180,21 @@ public class UI extends JFrame {
 		
 		txtAutor = new JTextField();
 		txtAutor.setColumns(10);
-		panelLibro.add(txtAutor, "cell 1 2,grow");
+		panelLibro.add(txtAutor, "cell 1 2,growx");
 		
 		JLabel lblEditorial = new JLabel("Editorial");
 		panelLibro.add(lblEditorial, "cell 0 3,grow");
 		
 		txtEditorial = new JTextField();
 		txtEditorial.setColumns(10);
-		panelLibro.add(txtEditorial, "cell 1 3,grow");
+		panelLibro.add(txtEditorial, "cell 1 3,growx");
 		
 		JLabel lblPrecio = new JLabel("Precio");
 		panelLibro.add(lblPrecio, "cell 0 4,grow");
 		
 		txtPrecio = new JTextField();
 		txtPrecio.setColumns(10);
-		panelLibro.add(txtPrecio, "cell 1 4,grow");
+		panelLibro.add(txtPrecio, "cell 1 4,growx");
 		
 		lblFormato = new JLabel("Formato");
 		panelLibro.add(lblFormato, "cell 0 5");
@@ -250,7 +251,7 @@ public class UI extends JFrame {
 		grupoEstado.add(rdbtnNovedad);
 		
 		panelLibreria = new JPanel();
-		tabbedPane.addTab("Libreria", null, panelLibreria, null);
+		tabbedPane.addTab("Libreria", new ImageIcon(UI.class.getResource("/res/iconos/icon_libros_cute_color_16px.png")), panelLibreria, null);
 		panelLibreria.setLayout(new MigLayout("", "[400,grow][350,grow][150]", "[50,grow][371px]"));
 		
 		filtro = new JComboBox();
@@ -274,8 +275,8 @@ public class UI extends JFrame {
 		
 		panelVenta = new JPanel();
 		panelVenta.setBackground(new Color(202, 232, 232));
-		tabbedPane.addTab("Compra/Venta", null, panelVenta, null);
-		panelVenta.setLayout(new MigLayout("", "[50,center][50,fill][150,center][96.00][80,grow]", "[40,center][40][40][40][40][40][40][40]"));
+		tabbedPane.addTab("Compra/Venta", new ImageIcon(UI.class.getResource("/res/iconos/icon_euro_cute_color16px.png")), panelVenta, null);
+		panelVenta.setLayout(new MigLayout("", "[50,center][50,fill][150,center][88.00][80,grow]", "[40,center][40][40][40][40][40][40][40]"));
 		
 		lblIsnV = new JLabel("ISBN");
 		panelVenta.add(lblIsnV, "cell 1 0,alignx trailing");
@@ -293,9 +294,9 @@ public class UI extends JFrame {
 		panelVenta.add(txtTituloVenta, "cell 2 1,growx");
 		txtTituloVenta.setColumns(10);
 		
-		lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon(UI.class.getResource("/res/imagenes/caja_registradora_100.png")));
-		panelVenta.add(lblNewLabel_1, "cell 4 1 1 4,alignx center");
+		lblIconVenta = new JLabel("");
+		lblIconVenta.setIcon(new ImageIcon(UI.class.getResource("/res/imagenes/caja_registradora_100.png")));
+		panelVenta.add(lblIconVenta, "cell 4 1 1 4,alignx center");
 		
 		lblAutorVentas = new JLabel("Autor");
 		panelVenta.add(lblAutorVentas, "cell 1 2,alignx trailing");
@@ -336,6 +337,9 @@ public class UI extends JFrame {
 		textPrecioVenta.setEditable(false);
 		textPrecioVenta.setColumns(10);
 		panelVenta.add(textPrecioVenta, "cell 2 6,growx");
+		
+		lblStock = new JLabel("Max: 0");
+		panelVenta.add(lblStock, "cell 3 6");
 		
 		btnComprar = new JButton("Realizar Compra");
 		
@@ -420,7 +424,7 @@ public class UI extends JFrame {
 				.getScaledInstance(
 						ancho, largo, Image.SCALE_DEFAULT)
 				);
-		etiqueta.setIcon(icon);
+		etiqueta.setIcon(new ImageIcon(UI.class.getResource("/res/imagenes/libro_abierto_cute_color120px.png")));
 		etiqueta.repaint();
 	}
 	

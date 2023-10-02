@@ -39,7 +39,7 @@ public class Mensajes {
 	}
 
 	public void mensajeInformeLibro(Libro libro,String titulo) {	
-		mensajeInfo("Ejemplar Vendido", libro.toString());
+		mensajeInfo(titulo, libro.toString());
 	}
 	
 }
