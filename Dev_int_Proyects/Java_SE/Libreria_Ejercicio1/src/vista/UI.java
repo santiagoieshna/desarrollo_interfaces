@@ -107,13 +107,15 @@ public class UI extends JFrame {
 	protected JButton btnRealizarVenta;
 	protected JButton btnComprar;
 	private JLabel lblIcono;
+	private JLabel lblNewLabel_1;
 
 
 	/**
 	 * Create the frame.
 	 */
 	public UI() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(UI.class.getResource("/res/imagenes/iconoApp.png")));
+//		setIconImage(Toolkit.getDefaultToolkit().getImage(UI.class.getResource("/res/imagenes/iconoApp.png")));
+		setIconImage(getIconImage());
 		setTitle("SantiBook");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -151,18 +153,20 @@ public class UI extends JFrame {
 		
 		// PONEMOS IMAGEN-------------------------------------------------------------------------
 		String imagenRuta = "src/res/imagenes/iconoGuardarLibro.png";
-		BufferedImage image = null;
-		image = cargarImagen(imagenRuta);
-		// Label para la imagen
+//		BufferedImage image = null;
+//		image = cargarImagen(imagenRuta);
+//		// Label para la imagen
+//
+//		 if (image != null) {
+//			 ImageIcon imageIcon = new ImageIcon(image.getScaledInstance(250, 116, Image.SCALE_SMOOTH));
+//			 lblIcono.setIcon(imageIcon);
+//		 }
+		
 		lblIcono = new JLabel();
-
-		 if (image != null) {
-			 ImageIcon imageIcon = new ImageIcon(image.getScaledInstance(250, 116, Image.SCALE_SMOOTH));
-			 lblIcono.setIcon(imageIcon);
-		 }
+		SetImageLabel(lblIcono, imagenRuta, 250, 116);
 		
 		panelLibro.add(lblIcono, "cell 2 0 1 5,alignx center,aligny center");
-		
+//		lblIcono.repaint();
 		JLabel lblTitulo = new JLabel("Titulo");
 		panelLibro.add(lblTitulo, "cell 0 1,grow");
 		
@@ -271,8 +275,7 @@ public class UI extends JFrame {
 		panelVenta = new JPanel();
 		panelVenta.setBackground(new Color(202, 232, 232));
 		tabbedPane.addTab("Compra/Venta", null, panelVenta, null);
-		panelVenta.setLayout(new MigLayout("", "[50,center][50,fill][150,center][96.00][80,grow]", 
-				"[40,center][40][40][40][40][40][40][40]"));
+		panelVenta.setLayout(new MigLayout("", "[50,center][50,fill][150,center][96.00][80,grow]", "[40,center][40][40][40][40][40][40][40]"));
 		
 		lblIsnV = new JLabel("ISBN");
 		panelVenta.add(lblIsnV, "cell 1 0,alignx trailing");
@@ -289,6 +292,10 @@ public class UI extends JFrame {
 		txtTituloVenta.setEditable(false);
 		panelVenta.add(txtTituloVenta, "cell 2 1,growx");
 		txtTituloVenta.setColumns(10);
+		
+		lblNewLabel_1 = new JLabel("");
+		lblNewLabel_1.setIcon(new ImageIcon(UI.class.getResource("/res/imagenes/caja_registradora_100.png")));
+		panelVenta.add(lblNewLabel_1, "cell 4 1 1 4,alignx center");
 		
 		lblAutorVentas = new JLabel("Autor");
 		panelVenta.add(lblAutorVentas, "cell 1 2,alignx trailing");
@@ -357,35 +364,41 @@ public class UI extends JFrame {
 		contentPane.add(panelBotones, BorderLayout.SOUTH);
 		
 		btnGuardar = new JButton("Guardar");
+		btnGuardar.setIcon(new ImageIcon(UI.class.getResource("/res/iconos/icon_guardar_cute_color_16.png")));
 		
 		panelBotones.add(btnGuardar);
 		
 		btnLimpiar = new JButton("Limpiar");
+		btnLimpiar.setIcon(new ImageIcon(UI.class.getResource("/res/iconos/icon_escoba_16.png")));
 		panelBotones.add(btnLimpiar);
 		
 		btnBorrar = new JButton("Borrar");
+		btnBorrar.setIcon(new ImageIcon(UI.class.getResource("/res/iconos/icon_basura_16.png")));
+		btnBorrar.setHorizontalAlignment(SwingConstants.LEFT);
 		panelBotones.add(btnBorrar);
 		
 		btnVender = new JButton("Compra/Venta");
+		btnVender.setIcon(new ImageIcon(UI.class.getResource("/res/iconos/icon_caja_registradora_cute_color_16.png")));
 		
 		panelBotones.add(btnVender);
 		
 		btnSalir = new JButton("Salir");
+		btnSalir.setIcon(new ImageIcon(UI.class.getResource("/res/iconos/icon_refugee_16.png")));
 	
 		
 		panelBotones.add(btnSalir);
 	}
 	
-	private BufferedImage cargarImagen(String imagenRuta) {
-		
-		try {
-			return ImageIO.read(new File(imagenRuta));
-		} catch (IOException e) {
-			
-			e.printStackTrace();
-		}
-		return null;
-	}
+//	private BufferedImage cargarImagen(String imagenRuta) {
+//		
+//		try {
+//			return ImageIO.read(new File(imagenRuta));
+//		} catch (IOException e) {
+//			
+//			e.printStackTrace();
+//		}
+//		return null;
+//	}
 
 	private void SetImageLabel(JLabel etiqueta, String ruta) {
 		ImageIcon image = new ImageIcon(ruta);

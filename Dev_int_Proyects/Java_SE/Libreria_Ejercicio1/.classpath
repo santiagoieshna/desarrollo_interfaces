@@ -7,6 +7,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Librerias_Java_Santi/jgoodies-common-1.8.0.jar"/>
+	<classpathentry kind="lib" path="C:/Libreria_Java_Santi/jgoodies-common-1.8.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
