@@ -8,5 +8,6 @@ namespace prueba1.model
 {
     internal interface moveAble
     {
+
     }
 }

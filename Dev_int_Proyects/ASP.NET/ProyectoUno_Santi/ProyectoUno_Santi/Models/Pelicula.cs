@@ -3,6 +3,10 @@
 public class Pelicula
 {
     private DateTime publicacion1;
+    private string v1;
+    private int v2;
+    private DateTime dateTime;
+    private string v3;
 
     private string Titulo {  get; set; }
     private DateTime Publicacion { get => publicacion1; set => publicacion1 = value; }
@@ -19,7 +23,14 @@ public class Pelicula
 		this.Publicacion = publicacion;
 		this.Duracion = duracion;
 		this.Pais = pais;
-		this.Publicacion1 = publicacion;
+		
 	}
-  
+
+    public Pelicula(string v1, int v2, DateTime dateTime, string v3)
+    {
+        this.v1 = v1;
+        this.v2 = v2;
+        this.dateTime = dateTime;
+        this.v3 = v3;
+    }
 }
