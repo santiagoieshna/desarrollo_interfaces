@@ -1,8 +1,9 @@
-﻿using System;
+﻿using ProyectoUno_Santi.Models.ObjectMother;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Pelicula.Models;
+
 
 namespace ProyectoUno_Santi.Service
 {
@@ -10,8 +11,8 @@ namespace ProyectoUno_Santi.Service
     {
         private List<Pelicula> Peliculas { get; set; }
 
-        public PeliculaService() { 
-            this.Peliculas= PeliculaOM.
+        public PeliculaService() {
+            this.Peliculas = PeliculaOM.ObtenerPeliculas();
         }
 
     }

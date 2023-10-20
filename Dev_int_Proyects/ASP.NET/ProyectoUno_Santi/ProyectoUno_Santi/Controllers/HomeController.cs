@@ -10,7 +10,7 @@ namespace ProyectoUno_Santi.Controllers
     {
         public ActionResult Index()
         {
-            //return Content("Felix Ibarra");
+          
             return View();
         }
 
